@@ -8,7 +8,7 @@ import PlaylistContainer from "./PlaylistContainer";
 import PlaylistHooks from "./PlaylistHooks";
 
 const Main = () => {
-  const { queue, removeVideo, addVideo, popVideo } = PlaylistHooks();
+  const { queue, removeVideo, addVideo, dequeueVideo } = PlaylistHooks();
 
   return (
     <MainContainer>
@@ -17,7 +17,10 @@ const Main = () => {
         removeVideo={removeVideo}
         addVideo={addVideo}
       ></PlaylistContainer>
-      <VideoContainer queue={queue} popVideo={popVideo}></VideoContainer>
+      <VideoContainer
+        queue={queue}
+        dequeueVideo={dequeueVideo}
+      ></VideoContainer>
       <ChatBarContainer></ChatBarContainer>
     </MainContainer>
   );

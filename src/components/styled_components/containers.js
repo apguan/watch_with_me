@@ -39,6 +39,23 @@ export const Url = styled.div`
   text-align: left;
 `;
 
+//video container stuff
+
+export const Timeline = styled.div`
+  position: relative;
+  margin: 15px auto;
+  height: 3px;
+  width: 90%;
+  border-radius: 5px;
+  border: 1px solid;
+`;
+
+export const ButtonsContainer = styled.div`
+  display: inline-flex;
+  justify-content: center;
+  flex-direction: row;
+`;
+
 //chat container stuff
 export const ChatWindow = styled.div`
   height: 100%;

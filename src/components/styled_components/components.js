@@ -44,7 +44,7 @@ export const Add = styled.button`
   width: 15%;
   height: 36px;
   border: none;
-  backgroun-color: none;
+  background-color: none;
 
   &:hover {
     background-color: #cff0cc;
@@ -95,5 +95,25 @@ export const ChatInput = styled.textarea`
     outline: none;
     border: 1px solid #6d69d3;
     animation: ${fadeIn} 0.5s linear;
+  }
+`;
+
+export const Playback = styled.div`
+  position: absolute;
+  background-color: red;
+  height: 100%;
+  width: ${props => (props.currTime / props.time) * 100 + 0.4}%;
+  border-radius: 2px;
+`;
+
+export const PlayButtons = styled.i`
+  display: flex;
+  align-items: center;
+  height: 30px;
+  width: 30px;
+
+  &:hover {
+    cursor: pointer;
+    color: red;
   }
 `;

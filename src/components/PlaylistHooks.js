@@ -1,7 +1,11 @@
 import { useState } from "react";
 
 const PlaylistHooks = () => {
-  const [queue, setQueue] = useState([]);
+  const [queue, setQueue] = useState([
+    "https://www.youtube.com/watch?v=kpe5JNOeu0E",
+    "https://www.youtube.com/watch?v=zbWpclMMA2w",
+    "https://www.youtube.com/watch?v=VXFKFs2L4eY"
+  ]);
 
   const addVideo = input => {
     if (input.length) {
@@ -13,15 +17,15 @@ const PlaylistHooks = () => {
   const removeVideo = video => {
     for (let i = 0; i < queue.length; i++) {
       if (queue[i] === video) {
-        let newArr = queue.slice(0, i).concat(queue.slice(i + 1));
+        let newArr = queue.slice(0, 1).concat(queue.slice(i + 1));
         setQueue(newArr);
       }
     }
   };
 
-  const popVideo = () => {
+  const dequeueVideo = () => {
     let newArr = queue.slice();
-    newArr.pop();
+    newArr.shift();
 
     setQueue(newArr);
   };
@@ -30,7 +34,7 @@ const PlaylistHooks = () => {
     queue,
     removeVideo,
     addVideo,
-    popVideo
+    dequeueVideo
   };
 };
 
