@@ -88,14 +88,12 @@ class VideoContainer extends Component {
   };
 
   pauseVideo = () => {
-    this.player.pauseVideo();
     clearInterval(this.state.interval);
+    this.player.pauseVideo();
   };
 
   nextVideo = () => {
-    if (this.player) {
-      this.player.destroy();
-    }
+    if (this.player) this.player.destroy();
     clearInterval(this.state.interval);
     this.setState(
       {
@@ -107,7 +105,6 @@ class VideoContainer extends Component {
 
   progressBar = () => {
     let interval = setInterval(() => {
-      console.log("hit");
       this.setState({
         currTime: this.player.getCurrentTime()
       });
