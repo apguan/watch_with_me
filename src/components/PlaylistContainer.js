@@ -1,37 +1,15 @@
 import React from "react";
-import PlaylistContainerHooks from "./PlaylistContainerHooks";
-
 import styled from "styled-components";
 
-const Window = styled.div`
-  width: 20vw;
-  margin: 0 15px;
-  height: 500px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-`;
+import {
+  Window,
+  InputBar,
+  UrlContainer,
+  Url
+} from "./styled_components/containers";
+import { Input, UrlText, Remove, Add } from "./styled_components/components";
 
-const Input = styled.input`
-  width: 84%;
-  float: left;
-  height: 36px;
-  border: none;
-  text-indent: 15px;
-  border-bottom: 2px solid;
-
-  &:focus {
-    outline: none;
-  }
-
-  &::-webkit-input-placeholder {
-    font-size: 16px;
-    color: #d3d3d3;
-  }
-`;
-
-const Button = styled.button`
-  width: 15%;
-  height: 36px;
-`;
+import PlaylistContainerHooks from "./PlaylistContainerHooks";
 
 const PlaylistContainer = () => {
   const {
@@ -42,30 +20,37 @@ const PlaylistContainer = () => {
     removeVideo
   } = PlaylistContainerHooks();
 
+  const submitToQueue = e => {
+    if (e.which === 13) {
+      addVideo();
+    }
+  };
+
   return (
-    <Window>
-      <div>
+    <Window width={20}>
+      <InputBar>
         <Input
           onChange={handleTextChange}
-          placeholder="Search Video..."
+          placeholder="Queue Up A Video!"
           value={input}
+          onKeyPress={submitToQueue}
         ></Input>
-        <Button onClick={addVideo}>
+        <Add type="submit" onClick={addVideo}>
           <i className="fa fa-plus" aria-hidden="true"></i>
-        </Button>
-        <div>
-          {queue.map((val, idx) => {
-            return (
-              <div key={idx}>
-                <span>{val}</span>
-                <button onClick={() => removeVideo(val)}>
-                  <i className="fa fa-minus" aria-hidden="true"></i>
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+        </Add>
+      </InputBar>
+      <UrlContainer>
+        {queue.map((val, idx) => {
+          return (
+            <Url key={idx}>
+              <UrlText value={`${idx + 1}: ` + val} disabled></UrlText>
+              <Remove onClick={() => removeVideo(val)}>
+                <i className="fa fa-minus" aria-hidden="true"></i>
+              </Remove>
+            </Url>
+          );
+        })}
+      </UrlContainer>
     </Window>
   );
 };
