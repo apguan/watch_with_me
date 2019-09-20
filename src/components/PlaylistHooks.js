@@ -1,19 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-const PlaylistContainerHooks = () => {
-  const [input, setInput] = useState("");
+const PlaylistHooks = () => {
   const [queue, setQueue] = useState([]);
 
-  const handleTextChange = e => {
-    e.preventDefault();
-    setInput(e.target.value);
-  };
-
-  const addVideo = () => {
+  const addVideo = input => {
     if (input.length) {
       let newQueue = queue.concat(input);
       setQueue(newQueue);
-      setInput("");
     }
   };
 
@@ -26,13 +19,19 @@ const PlaylistContainerHooks = () => {
     }
   };
 
+  const popVideo = () => {
+    let newArr = queue.slice();
+    newArr.pop();
+
+    setQueue(newArr);
+  };
+
   return {
-    input,
     queue,
-    handleTextChange,
     removeVideo,
-    addVideo
+    addVideo,
+    popVideo
   };
 };
 
-export default PlaylistContainerHooks;
+export default PlaylistHooks;

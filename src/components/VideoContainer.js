@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
 import { Window } from "./styled_components/containers.js";
 import styled from "styled-components";
 
@@ -7,7 +7,7 @@ const Video = styled.div`
   height: 90% !important;
 `;
 
-class VideoContainer extends PureComponent {
+class VideoContainer extends Component {
   componentDidMount = () => {
     if (!window.YT) {
       const tag = document.createElement("script");
@@ -20,9 +20,19 @@ class VideoContainer extends PureComponent {
     }
   };
 
+  componentDidUpdate(nextProps) {
+    console.log(nextProps.queue[0] !== this.props.queue[0]);
+    if (nextProps.queue[0] !== this.props.queue[0]) {
+      this.loadVideo();
+    }
+  }
+
+  // https://www.youtube.com/watch?v=DyX-QZZBgpw
   loadVideo = () => {
-    // const { videoId } = this.props;
-    const videoId = "4halg2kzPms";
+    let { queue } = this.props;
+    let url = queue[0];
+    let videoId = this.parseVideoId(url);
+
     this.player = new window.YT.Player(`youtube-player-${videoId}`, {
       videoId: videoId,
       playerVars: {
@@ -43,15 +53,28 @@ class VideoContainer extends PureComponent {
     });
   };
 
+  parseVideoId = url => {
+    if (url) {
+      let regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      let match = url.match(regExp);
+      if (match && match[2].length == 11) {
+        return match[2];
+      }
+    }
+  };
+
   onPlayerReady = event => {
     event.target.playVideo();
   };
 
   render = () => {
-    // const { id } = this.props;
+    const { queue } = this.props;
+    const url = queue[0];
+    const videoId = this.parseVideoId(url);
+
     return (
       <Window width={50}>
-        <Video id={`youtube-player-4halg2kzPms`} />
+        <Video id={videoId ? `youtube-player-${videoId}` : null} />
       </Window>
     );
   };

@@ -1,28 +1,25 @@
-import React from "react";
-import styled from "styled-components";
-
+import React, { useState } from "react";
 import {
   Window,
   InputBar,
   UrlContainer,
   Url
 } from "./styled_components/containers";
+
 import { Input, UrlText, Remove, Add } from "./styled_components/components";
 
-import PlaylistContainerHooks from "./PlaylistContainerHooks";
+const PlaylistContainer = ({ queue, removeVideo, addVideo }) => {
+  const [input, setInput] = useState([]);
 
-const PlaylistContainer = () => {
-  const {
-    addVideo,
-    input,
-    queue,
-    handleTextChange,
-    removeVideo
-  } = PlaylistContainerHooks();
+  const handleTextChange = e => {
+    e.preventDefault();
+    setInput(e.target.value);
+  };
 
   const submitToQueue = e => {
     if (e.which === 13) {
-      addVideo();
+      addVideo(input);
+      setInput("");
     }
   };
 
@@ -35,7 +32,13 @@ const PlaylistContainer = () => {
           value={input}
           onKeyPress={submitToQueue}
         ></Input>
-        <Add type="submit" onClick={addVideo}>
+        <Add
+          type="submit"
+          onClick={() => {
+            addVideo(input);
+            setInput("");
+          }}
+        >
           <i className="fa fa-plus" aria-hidden="true"></i>
         </Add>
       </InputBar>

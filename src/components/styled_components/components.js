@@ -59,6 +59,7 @@ export const Add = styled.button`
 export const Remove = styled.button`
   border: none;
   background-color: none;
+  text-align: center;
   float: right;
   height: 20px;
   width: 20px;
@@ -83,6 +84,7 @@ export const ChatTitle = styled.p`
 
 export const ChatInput = styled.textarea`
   border: none;
+  border-top: 2px solid #5b5b5b;
   bottom: 0;
   height: 5em;
   resize: none;

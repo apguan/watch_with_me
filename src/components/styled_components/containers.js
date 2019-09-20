@@ -40,4 +40,6 @@ export const Url = styled.div`
 `;
 
 //chat container stuff
-export const ChatWindow = styled.div``;
+export const ChatWindow = styled.div`
+  height: 100%;
+`;
