@@ -5,6 +5,8 @@ import { fadeIn } from "./animations.js";
 export const UrlText = styled.input`
   border: none;
   margin: 0 10px;
+  width: 80%;
+  vertical-align: middle;
   font-family: "Titillium Web", sans-serif;
 
   &::-webkit-input-placeholder {
@@ -40,15 +42,17 @@ export const Input = styled.input`
   }
 `;
 
-export const Add = styled.button`
+export const Add = styled.i`
   width: 15%;
+  margin 9px 0;
   height: 36px;
   border: none;
   background-color: none;
 
   &:hover {
-    background-color: #cff0cc;
-    animation: ${fadeIn} 0.5s linear;
+    cursor: pointer;
+    color: #20B2AA;
+    animation: ${fadeIn} 0.1s linear;
   }
 
   &:focus {
@@ -56,18 +60,18 @@ export const Add = styled.button`
   }
 `;
 
-export const Remove = styled.button`
+export const Remove = styled.i`
   border: none;
   background-color: none;
-  text-align: center;
   float: right;
   height: 20px;
   width: 20px;
-  margin: 0 5px 0 0;
+  margin: 5px 0 0;
 
   &:hover {
-    background-color: #ff4040;
-    animation: ${fadeIn} 0.5s linear;
+    cursor: pointer;
+    color: #ff4040;
+    animation: ${fadeIn} 0.1s linear;
   }
 
   &:focus {
@@ -110,6 +114,7 @@ export const Playback = styled.div`
 export const PlayButtons = styled.i`
   display: flex;
   align-items: center;
+  margin: 0 10px;
   height: 30px;
   width: 30px;
 

@@ -34,22 +34,24 @@ const PlaylistContainer = ({ queue, removeVideo, addVideo }) => {
         ></Input>
         <Add
           type="submit"
+          className="fas fa-plus-circle"
+          aria-hidden="true"
           onClick={() => {
             addVideo(input);
             setInput("");
           }}
-        >
-          <i className="fa fa-plus" aria-hidden="true"></i>
-        </Add>
+        ></Add>
       </InputBar>
       <UrlContainer>
         {queue.map((val, idx) => {
           return (
             <Url key={idx}>
               <UrlText value={`${idx + 1}: ` + val} disabled></UrlText>
-              <Remove onClick={() => removeVideo(val)}>
-                <i className="fa fa-minus" aria-hidden="true"></i>
-              </Remove>
+              <Remove
+                onClick={() => removeVideo(val)}
+                className="fa fa-minus-circle"
+                aria-hidden="true"
+              ></Remove>
             </Url>
           );
         })}
