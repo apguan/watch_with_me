@@ -16,6 +16,7 @@ class VideoContainer extends Component {
   state = {
     time: 0,
     currTime: 0,
+    videoId: null,
     ready: false
   };
 
@@ -38,7 +39,6 @@ class VideoContainer extends Component {
     }
   }
 
-  // https://www.youtube.com/watch?v=DyX-QZZBgpw
   loadVideo = () => {
     let { queue } = this.props;
     let url = queue[0];
@@ -82,16 +82,6 @@ class VideoContainer extends Component {
     );
   };
 
-  parseVideoId = url => {
-    if (url) {
-      let regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-      let match = url.match(regExp);
-      if (match && match[2].length == 11) {
-        return match[2];
-      }
-    }
-  };
-
   playVideo = () => {
     this.player.playVideo();
     this.progressBar();
@@ -103,12 +93,16 @@ class VideoContainer extends Component {
   };
 
   nextVideo = () => {
+    if (this.player) {
+      this.player.destroy();
+    }
     clearInterval(this.state.interval);
-    this.setState({
-      currTime: 0
-    });
-    this.player.destroy();
-    this.props.dequeueVideo();
+    this.setState(
+      {
+        currTime: 0
+      },
+      () => this.props.dequeueVideo()
+    );
   };
 
   progressBar = () => {
@@ -124,10 +118,19 @@ class VideoContainer extends Component {
     });
   };
 
+  parseVideoId = url => {
+    if (url) {
+      let regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      let match = url.match(regExp);
+      if (match && match[2].length == 11) {
+        return match[2];
+      }
+    }
+  };
+
   render = () => {
-    const { queue } = this.props;
-    const { ready, currTime } = this.state;
-    const url = queue[0];
+    const { currTime } = this.state;
+    const url = this.props.queue[0];
     const videoId = this.parseVideoId(url);
 
     return (

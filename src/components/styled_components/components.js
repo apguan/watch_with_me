@@ -101,9 +101,10 @@ export const ChatInput = styled.textarea`
 export const Playback = styled.div`
   position: absolute;
   background-color: red;
+  border: none;
+  border-radius: 7px;
   height: 100%;
-  width: ${props => (props.currTime / props.time) * 100 + 0.4}%;
-  border-radius: 2px;
+  width: ${props => (props.currTime / props.time) * 100 + 0.1}%;
 `;
 
 export const PlayButtons = styled.i`

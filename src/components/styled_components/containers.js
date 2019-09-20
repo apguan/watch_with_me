@@ -44,7 +44,7 @@ export const Url = styled.div`
 export const Timeline = styled.div`
   position: relative;
   margin: 15px auto;
-  height: 3px;
+  height: 8px;
   width: 90%;
   border-radius: 5px;
   border: 1px solid;

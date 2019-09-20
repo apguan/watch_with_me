@@ -2,6 +2,7 @@ import { useState } from "react";
 
 const PlaylistHooks = () => {
   const [queue, setQueue] = useState([
+    "https://www.youtube.com/watch?v=DyX-QZZBgpw",
     "https://www.youtube.com/watch?v=kpe5JNOeu0E",
     "https://www.youtube.com/watch?v=zbWpclMMA2w",
     "https://www.youtube.com/watch?v=VXFKFs2L4eY"
