@@ -115,12 +115,16 @@ export const Playback = styled.div`
 export const PlayButtons = styled.i`
   display: flex;
   align-items: center;
-  margin: 0 10px;
-  height: 30px;
-  width: 30px;
+  text-align: center;
+  margin: 10px;
 
   &:hover {
     cursor: pointer;
     color: red;
   }
+`;
+
+export const TimeStamp = styled.p`
+  margin: 0;
+  text-align: center;
 `;

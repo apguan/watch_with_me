@@ -16,7 +16,7 @@ export const Window = styled.div`
   width: ${props => props.width}vw;
   min-width: ${props => props.minWidth || 100}px;
   margin: 15px;
-  min-height: 400px;
+  min-height: 450px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
@@ -45,9 +45,9 @@ export const Url = styled.div`
 
 export const Timeline = styled.div`
   position: relative;
-  margin: 15px auto;
+  margin: 15px auto 0px auto;
   height: 8px;
-  width: 90%;
+  width: 95%;
   border-radius: 5px;
   border: 1px solid;
 `;

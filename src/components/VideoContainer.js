@@ -1,10 +1,15 @@
 import React, { Component } from "react";
+import humanizeDuration from "humanize-duration";
 import {
   Window,
   ButtonsContainer,
   Timeline
 } from "./styled_components/containers";
-import { PlayButtons, Playback } from "./styled_components/components";
+import {
+  PlayButtons,
+  Playback,
+  TimeStamp
+} from "./styled_components/components";
 import styled from "styled-components";
 
 const Video = styled.div`
@@ -21,6 +26,16 @@ class VideoContainer extends Component {
   };
 
   componentDidMount = () => {
+    this.createIframeTag();
+  };
+
+  componentDidUpdate(nextProps) {
+    if (nextProps.queue[0] !== this.props.queue[0]) {
+      this.createIframeTag();
+    }
+  }
+
+  createIframeTag = () => {
     if (!window.YT) {
       const tag = document.createElement("script");
       tag.src = "https://www.youtube.com/iframe_api";
@@ -31,12 +46,6 @@ class VideoContainer extends Component {
       this.loadVideo();
     }
   };
-
-  componentDidUpdate(nextProps) {
-    if (nextProps.queue[0] !== this.props.queue[0]) {
-      this.loadVideo();
-    }
-  }
 
   loadVideo = () => {
     let { queue } = this.props;
@@ -57,8 +66,7 @@ class VideoContainer extends Component {
       events: {
         onReady: this.onPlayerReady,
         onPlaybackQualityChange: this.onPlayerPlaybackQualityChange,
-        onStateChange: this.onPlayerStateChange,
-        onError: this.onPlayerError
+        onStateChange: this.onPlayerStateChange
       }
     });
   };
@@ -71,7 +79,6 @@ class VideoContainer extends Component {
 
   onPlayerReady = event => {
     event.target.seekTo(0);
-    event.target.playVideo();
     this.setState(
       {
         time: event.target.getDuration(),
@@ -92,14 +99,34 @@ class VideoContainer extends Component {
   };
 
   nextVideo = () => {
-    if (this.player) this.player.destroy();
+    if (this.player) {
+      this.setState(
+        {
+          ready: false
+        },
+        () => this.player.destroy()
+      );
+    }
+
     clearInterval(this.state.interval);
+
     this.setState(
       {
         currTime: 0
       },
       () => this.props.dequeueVideo()
     );
+  };
+
+  updateProgressBarPosition = e => {
+    const rect = e.target.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const totalWidth = rect.width - 2; //subtract borders
+    const newCurrTime = (x / totalWidth) * this.state.time;
+
+    console.log(x, totalWidth, newCurrTime);
+    this.player.seekTo(newCurrTime);
+    this.progressBar();
   };
 
   progressBar = () => {
@@ -114,20 +141,6 @@ class VideoContainer extends Component {
     });
   };
 
-  updateProgressBarPosition = e => {
-    const rect = e.target.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const totalWidth = e.target.offsetWidth - 2; //subtract borders
-    const newCurrTime = (x / totalWidth) * this.state.time;
-
-    this.setState(
-      {
-        currTime: newCurrTime
-      },
-      () => this.player.seekTo(newCurrTime)
-    );
-  };
-
   parseVideoId = url => {
     if (url) {
       let regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -138,8 +151,16 @@ class VideoContainer extends Component {
     }
   };
 
+  secondsToTime = time => {
+    let date = new Date(null);
+    date.setSeconds(time); // specify value for SECONDS here
+    let timeString = date.toISOString().substr(11, 8);
+
+    return timeString;
+  };
+
   render = () => {
-    const { currTime } = this.state;
+    const { currTime, time, ready } = this.state;
     const url = this.props.queue[0];
     const videoId = this.parseVideoId(url);
 
@@ -148,9 +169,14 @@ class VideoContainer extends Component {
         {videoId ? (
           <>
             <Video id={`youtube-player-${videoId}`} />
-            <Timeline onClick={this.updateProgressBarPosition}>
-              <Playback currTime={currTime} time={this.state.time}></Playback>
-            </Timeline>
+            {ready ? (
+              <Timeline onClick={this.updateProgressBarPosition}>
+                <Playback currTime={currTime} time={this.state.time}></Playback>
+              </Timeline>
+            ) : null}
+            <TimeStamp>
+              {this.secondsToTime(currTime)}/{this.secondsToTime(time)}
+            </TimeStamp>
             <ButtonsContainer>
               <PlayButtons
                 onClick={this.playVideo}
