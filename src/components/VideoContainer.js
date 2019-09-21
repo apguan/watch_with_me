@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import humanizeDuration from "humanize-duration";
 import {
   Window,
   ButtonsContainer,
@@ -90,7 +89,7 @@ class VideoContainer extends Component {
 
   playVideo = () => {
     this.player.playVideo();
-    this.progressBar();
+    // this.progressBar();
   };
 
   pauseVideo = () => {
@@ -99,14 +98,7 @@ class VideoContainer extends Component {
   };
 
   nextVideo = () => {
-    if (this.player) {
-      this.setState(
-        {
-          ready: false
-        },
-        () => this.player.destroy()
-      );
-    }
+    if (this.player) this.player.destroy();
 
     clearInterval(this.state.interval);
 
@@ -125,8 +117,8 @@ class VideoContainer extends Component {
     const newCurrTime = (x / totalWidth) * this.state.time;
 
     console.log(x, totalWidth, newCurrTime);
-    this.player.seekTo(newCurrTime);
-    this.progressBar();
+    // this.player.seekTo(newCurrTime);
+    // this.progressBar();
   };
 
   progressBar = () => {
@@ -161,8 +153,7 @@ class VideoContainer extends Component {
 
   render = () => {
     const { currTime, time, ready } = this.state;
-    const url = this.props.queue[0];
-    const videoId = this.parseVideoId(url);
+    const videoId = this.parseVideoId(this.props.queue[0]);
 
     return (
       <Window width={50} minWidth={500}>
