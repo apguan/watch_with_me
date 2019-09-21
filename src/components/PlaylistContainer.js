@@ -24,7 +24,7 @@ const PlaylistContainer = ({ queue, removeVideo, addVideo }) => {
   };
 
   return (
-    <Window width={20}>
+    <Window width={20} minWidth={275}>
       <InputBar>
         <Input
           onChange={handleTextChange}

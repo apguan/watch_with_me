@@ -2,9 +2,11 @@ import styled from "styled-components";
 
 export const MainContainer = styled.div`
   display: flex;
+  width: 100vw;
+  flex-wrap: wrap;
   flex-direction: row;
   justify-content: center;
-  margin: 15vh auto;
+  margin: 15vh 0;
   text-align: center;
 `;
 
@@ -12,9 +14,9 @@ export const Window = styled.div`
   display: flex;
   flex-direction: column;
   width: ${props => props.width}vw;
-  min-width: 200px;
-  margin: 0 15px;
-  height: 500px;
+  min-width: ${props => props.minWidth || 100}px;
+  margin: 15px;
+  min-height: 400px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 

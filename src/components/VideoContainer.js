@@ -33,7 +33,6 @@ class VideoContainer extends Component {
   };
 
   componentDidUpdate(nextProps) {
-    console.log(nextProps.queue[0] !== this.props.queue[0]);
     if (nextProps.queue[0] !== this.props.queue[0]) {
       this.loadVideo();
     }
@@ -52,7 +51,7 @@ class VideoContainer extends Component {
         showinfo: 1,
         egm: 0,
         showsearch: 1,
-        controls: 1,
+        controls: 0,
         modestbranding: 0
       },
       events: {
@@ -115,6 +114,20 @@ class VideoContainer extends Component {
     });
   };
 
+  updateProgressBarPosition = e => {
+    const rect = e.target.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const totalWidth = e.target.offsetWidth - 2; //subtract borders
+    const newCurrTime = (x / totalWidth) * this.state.time;
+
+    this.setState(
+      {
+        currTime: newCurrTime
+      },
+      () => this.player.seekTo(newCurrTime)
+    );
+  };
+
   parseVideoId = url => {
     if (url) {
       let regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -131,11 +144,11 @@ class VideoContainer extends Component {
     const videoId = this.parseVideoId(url);
 
     return (
-      <Window width={50}>
+      <Window width={50} minWidth={500}>
         {videoId ? (
           <>
             <Video id={`youtube-player-${videoId}`} />
-            <Timeline>
+            <Timeline onClick={this.updateProgressBarPosition}>
               <Playback currTime={currTime} time={this.state.time}></Playback>
             </Timeline>
             <ButtonsContainer>

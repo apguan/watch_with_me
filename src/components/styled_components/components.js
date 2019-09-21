@@ -3,9 +3,10 @@ import { fadeIn } from "./animations.js";
 
 //need to use input to allow for proper overflow
 export const UrlText = styled.input`
+  position: relative;
   border: none;
   margin: 0 10px;
-  width: 80%;
+  width: 75%;
   vertical-align: middle;
   font-family: "Titillium Web", sans-serif;
 
@@ -66,7 +67,7 @@ export const Remove = styled.i`
   float: right;
   height: 20px;
   width: 20px;
-  margin: 5px 0 0;
+  margin: 5px 3px 0 0;
 
   &:hover {
     cursor: pointer;

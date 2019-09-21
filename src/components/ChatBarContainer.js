@@ -5,7 +5,7 @@ import { ChatTitle, ChatInput } from "./styled_components/components";
 
 const ChatBarContainer = props => {
   return (
-    <Window width={25}>
+    <Window width={20} minWidth={200}>
       <ChatTitle>Chat</ChatTitle>
       <ChatWindow></ChatWindow>
       <ChatInput placeholder="Be social here!"></ChatInput>
