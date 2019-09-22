@@ -1,24 +1,9 @@
 import { useState } from "react";
-const fetchVideoInfo = require("youtube-info");
-
-const parseVideoId = url => {
-  if (url) {
-    let regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    let match = url.match(regExp);
-    if (match && match[2].length == 11) {
-      return match[2];
-    }
-  }
-};
 
 const PlaylistHooks = () => {
   const [queue, setQueue] = useState([]);
 
   const addVideo = input => {
-    fetchVideoInfo(parseVideoId(input)).then(videoInfo => {
-      console.log(videoInfo);
-    });
-
     if (input.length) {
       let newQueue = queue.concat(input);
       setQueue(newQueue);
