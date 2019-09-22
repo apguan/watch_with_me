@@ -20,6 +20,7 @@ class VideoContainer extends Component {
   state = {
     time: 0,
     currTime: 0,
+    scrubTime: 0,
     videoId: null,
     play: true,
     ready: false
@@ -109,7 +110,6 @@ class VideoContainer extends Component {
     const totalWidth = rect.width - 2; //subtract borders
     const newCurrTime = (x / totalWidth) * this.state.time;
 
-    console.log(x, totalWidth, newCurrTime);
     clearInterval(this.state.interval);
     this.player.seekTo(newCurrTime);
     this.progressBar();
@@ -125,6 +125,15 @@ class VideoContainer extends Component {
     this.setState({
       interval: interval
     });
+  };
+
+  scrubVideo = e => {
+    const rect = e.target.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const totalWidth = rect.width - 2; //subtract borders
+    const newCurrTime = (x / totalWidth) * this.state.time;
+
+    this.setState({ scrubTime: newCurrTime });
   };
 
   parseVideoId = url => {
@@ -146,7 +155,7 @@ class VideoContainer extends Component {
   };
 
   render = () => {
-    const { currTime, time, ready } = this.state;
+    const { currTime, time, scrubTime, ready } = this.state;
     const videoId = this.parseVideoId(this.props.queue[0]);
 
     return (
@@ -155,12 +164,19 @@ class VideoContainer extends Component {
           <>
             <Video id="video-player" />
             {ready ? (
-              <Timeline onClick={this.updateProgressBarPosition}>
+              <Timeline
+                onClick={this.updateProgressBarPosition}
+                onMouseMove={this.scrubVideo}
+                onMouseOut={() => this.setState({ scrubTime: 0 })}
+              >
                 <Playback currTime={currTime} time={this.state.time}></Playback>
               </Timeline>
             ) : null}
             <TimeStamp>
-              {this.secondsToTime(currTime)}/{this.secondsToTime(time)}
+              {scrubTime === 0
+                ? this.secondsToTime(currTime)
+                : this.secondsToTime(scrubTime)}
+              /{this.secondsToTime(time)}
             </TimeStamp>
             <ButtonsContainer>
               <PlayButtons

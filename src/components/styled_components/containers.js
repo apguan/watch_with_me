@@ -49,6 +49,10 @@ export const Timeline = styled.div`
   width: 95%;
   border-radius: 5px;
   border: 1px solid;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const ButtonsContainer = styled.div`
