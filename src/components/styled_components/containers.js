@@ -42,7 +42,6 @@ export const Url = styled.div`
 `;
 
 //video container stuff
-
 export const Timeline = styled.div`
   position: relative;
   margin: 15px auto 0px auto;

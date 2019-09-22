@@ -110,6 +110,7 @@ export const Playback = styled.div`
   border-radius: 7px;
   height: 100%;
   width: ${props => (props.currTime / props.time) * 100 + 0.1}%;
+  z-index: -1;
 `;
 
 export const PlayButtons = styled.i`

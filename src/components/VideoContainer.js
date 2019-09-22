@@ -21,6 +21,7 @@ class VideoContainer extends Component {
     time: 0,
     currTime: 0,
     videoId: null,
+    play: true,
     ready: false
   };
 
@@ -38,6 +39,7 @@ class VideoContainer extends Component {
     if (!window.YT) {
       const tag = document.createElement("script");
       tag.src = "https://www.youtube.com/iframe_api";
+      console.log(window.onYouTubeIframeAPIReady);
       window.onYouTubeIframeAPIReady = this.loadVideo;
       const firstScriptTag = document.getElementsByTagName("script")[0];
       firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
@@ -47,11 +49,9 @@ class VideoContainer extends Component {
   };
 
   loadVideo = () => {
-    let { queue } = this.props;
-    let url = queue[0];
-    let videoId = this.parseVideoId(url);
+    let videoId = this.parseVideoId(this.props.queue[0]);
 
-    this.player = new window.YT.Player(`youtube-player-${videoId}`, {
+    this.player = new window.YT.Player(`video-player`, {
       videoId: videoId,
       playerVars: {
         autoplay: 0,
@@ -89,7 +89,7 @@ class VideoContainer extends Component {
 
   playVideo = () => {
     this.player.playVideo();
-    // this.progressBar();
+    this.progressBar();
   };
 
   pauseVideo = () => {
@@ -99,15 +99,8 @@ class VideoContainer extends Component {
 
   nextVideo = () => {
     if (this.player) this.player.destroy();
-
     clearInterval(this.state.interval);
-
-    this.setState(
-      {
-        currTime: 0
-      },
-      () => this.props.dequeueVideo()
-    );
+    this.setState({ currTime: 0 }, () => this.props.dequeueVideo());
   };
 
   updateProgressBarPosition = e => {
@@ -117,8 +110,9 @@ class VideoContainer extends Component {
     const newCurrTime = (x / totalWidth) * this.state.time;
 
     console.log(x, totalWidth, newCurrTime);
-    // this.player.seekTo(newCurrTime);
-    // this.progressBar();
+    clearInterval(this.state.interval);
+    this.player.seekTo(newCurrTime);
+    this.progressBar();
   };
 
   progressBar = () => {
@@ -159,7 +153,7 @@ class VideoContainer extends Component {
       <Window width={50} minWidth={500}>
         {videoId ? (
           <>
-            <Video id={`youtube-player-${videoId}`} />
+            <Video id="video-player" />
             {ready ? (
               <Timeline onClick={this.updateProgressBarPosition}>
                 <Playback currTime={currTime} time={this.state.time}></Playback>
@@ -169,6 +163,11 @@ class VideoContainer extends Component {
               {this.secondsToTime(currTime)}/{this.secondsToTime(time)}
             </TimeStamp>
             <ButtonsContainer>
+              <PlayButtons
+                onClick={() => this.player.seekTo(0)}
+                className="fas fa-backward"
+                aria-hidden="true"
+              ></PlayButtons>
               <PlayButtons
                 onClick={this.playVideo}
                 className="fas fa-play-circle"
@@ -181,7 +180,7 @@ class VideoContainer extends Component {
               ></PlayButtons>
               <PlayButtons
                 onClick={this.nextVideo}
-                className="fas fa-chevron-right"
+                className="fas fa-fast-forward"
                 aria-hidden="true"
               ></PlayButtons>
             </ButtonsContainer>
