@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Window,
   InputBar,
   UrlContainer,
-  Url
-} from "./styled_components/containers";
+  Url,
+} from './styled_components/containers';
 
-import { Input, UrlText, Remove, Add } from "./styled_components/components";
+import { Input, UrlText, Remove, Add } from './styled_components/components';
 
-const PlaylistContainer = ({ queue, removeVideo, addVideo }) => {
+const PlaylistContainer = ({ queue, removeVideo, addVideo, socket }) => {
   const [input, setInput] = useState([]);
 
   const handleTextChange = e => {
@@ -19,7 +19,8 @@ const PlaylistContainer = ({ queue, removeVideo, addVideo }) => {
   const submitToQueue = e => {
     if (e.which === 13) {
       addVideo(input);
-      setInput("");
+      socket.emit('queue', input);
+      setInput('');
     }
   };
 
@@ -38,7 +39,7 @@ const PlaylistContainer = ({ queue, removeVideo, addVideo }) => {
           aria-hidden="true"
           onClick={() => {
             addVideo(input);
-            setInput("");
+            setInput('');
           }}
         ></Add>
       </InputBar>

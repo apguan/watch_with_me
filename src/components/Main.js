@@ -9,10 +9,10 @@ import PlaylistHooks from './PlaylistHooks';
 
 import socketIOClient from 'socket.io-client';
 const socket = socketIOClient('http://localhost:4000/');
-
 const Main = () => {
   const { queue, removeVideo, addVideo, dequeueVideo } = PlaylistHooks();
   if (!socket) return null;
+  socket.on('hi', console.log('hi was emitted'));
   return (
     <MainContainer>
       <PlaylistContainer
