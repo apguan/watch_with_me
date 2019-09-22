@@ -107,7 +107,7 @@ class VideoContainer extends Component {
   updateProgressBarPosition = e => {
     const rect = e.target.getBoundingClientRect();
     const x = e.clientX - rect.left;
-    const totalWidth = rect.width - 2; //subtract borders
+    const totalWidth = rect.width - 1; //subtract borders
     const newCurrTime = (x / totalWidth) * this.state.time;
 
     clearInterval(this.state.interval);
@@ -130,7 +130,7 @@ class VideoContainer extends Component {
   scrubVideo = e => {
     const rect = e.target.getBoundingClientRect();
     const x = e.clientX - rect.left;
-    const totalWidth = rect.width - 2; //subtract borders
+    const totalWidth = rect.width - 1; //subtract borders
     const newCurrTime = (x / totalWidth) * this.state.time;
 
     this.setState({ scrubTime: newCurrTime });

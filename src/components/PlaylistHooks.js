@@ -1,23 +1,33 @@
 import { useState } from "react";
+const fetchVideoInfo = require("youtube-info");
 
 const PlaylistHooks = () => {
-  const [queue, setQueue] = useState([
-    "https://www.youtube.com/watch?v=DyX-QZZBgpw",
-    "https://www.youtube.com/watch?v=kpe5JNOeu0E",
-    "https://www.youtube.com/watch?v=zbWpclMMA2w",
-    "https://www.youtube.com/watch?v=VXFKFs2L4eY"
-  ]);
+  const [queue, setQueue] = useState([]);
 
   const addVideo = input => {
+    const parseVideoId = url => {
+      if (url) {
+        let regExp = `/^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/`;
+        let match = url.match(regExp);
+        if (match && match[2].length == 11) {
+          return match[2];
+        }
+      }
+    };
+
+    fetchVideoInfo(parseVideoId(input)).then(videoInfo => {
+      console.log(videoInfo);
+    });
+
     if (input.length) {
       let newQueue = queue.concat(input);
       setQueue(newQueue);
     }
   };
 
-  const removeVideo = video => {
+  const removeVideo = url => {
     for (let i = 0; i < queue.length; i++) {
-      if (queue[i] === video) {
+      if (queue[i].url === url) {
         let newArr = queue.slice(0, 1).concat(queue.slice(i + 1));
         setQueue(newArr);
       }
