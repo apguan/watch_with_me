@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
-import { Window, ChatWindow } from "./styled_components/containers";
-import { ChatTitle, ChatInput } from "./styled_components/components";
+import { Window, ChatWindow } from './styled_components/containers';
+import { ChatTitle, ChatInput } from './styled_components/components';
 
 const ChatBarContainer = props => {
   return (
