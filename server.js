@@ -7,38 +7,49 @@ const io = require("socket.io")(http);
 
 app.use(express.static(path.join(__dirname, "build")));
 
-app.get("/", (req, res) => {
+app.get("/", (req, res) => {});
+
+app.get("/:roomId", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-app.get("/:roomId", (req, res) => {
-  console.log("a user connected");
-  let room = req.params.roomId;
+let roomDetails = {};
 
-  const nsp = io.of(room);
+io.on("connect", socket => {
+  let room = socket.handshake["query"]["r_var"];
+  socket.join(room);
 
-  let queue = [];
-  let messages = [];
-  let videoDetails = {};
+  if (!roomDetails[room]) {
+    roomDetails[room] = {
+      queue: [],
+      messages: [],
+      videoDetails: {}
+    };
+  }
 
-  // nsp.on("connect", socket => {
-  //   console.log("someone has connected to the room");
-  // });
+  console.log("user joined room " + room, roomDetails[room]);
+  let details = roomDetails[room];
 
-  // nsp.on("queue", socket => {
-  //   console.log(socket);
-  // });
+  socket.on("message", msg => {
+    details.messages.push(msg);
+    io.to(room).emit("message", details.messages);
+  });
 
-  // nsp.on("room", socket => {
-  //   console.log(socket);
-  // });
+  socket.on("queue", videos => {
+    details.queue.push(videos);
+    console.log(details);
+    io.to(room).emit("queue", details.queue);
+  });
 
-  // nsp.on("video", socket => {
-  //   console.log(socket);
-  // });
+  socket.on("video details", details => {
+    details.videoDetails = details;
+    io.to(room).emit("video details", details);
+  });
 
-  nsp.emit("hi", "hello world");
-  nsp.emit("queue");
+  socket.on("disconnect", function() {
+    socket.leave(room);
+    console.log("user disconnected");
+  });
 });
 
 http.listen(4000, () => {

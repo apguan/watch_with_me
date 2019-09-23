@@ -1,26 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Window,
   InputBar,
   UrlContainer,
-  Url,
-} from './styled_components/containers';
+  Url
+} from "./styled_components/containers";
 
-import { Input, UrlText, Remove, Add } from './styled_components/components';
+import { Input, UrlText, Remove, Add } from "./styled_components/components";
 
-const PlaylistContainer = ({ queue, removeVideo, addVideo, socket }) => {
+const PlaylistContainer = ({
+  queue,
+  removeVideo,
+  addVideo,
+  syncVideos,
+  socket
+}) => {
   const [input, setInput] = useState([]);
+
+  socket.on("queue", data => {
+    syncVideos(data);
+  });
 
   const handleTextChange = e => {
     e.preventDefault();
     setInput(e.target.value);
   };
 
-  const submitToQueue = e => {
+  const handleClick = e => {
+    addVideo(input);
+    setInput("");
+    socket.emit("queue", input);
+  };
+
+  const handleKeyEnter = e => {
     if (e.which === 13) {
       addVideo(input);
-      socket.emit('queue', input);
-      setInput('');
+      setInput("");
+      socket.emit("queue", input);
     }
   };
 
@@ -31,16 +47,13 @@ const PlaylistContainer = ({ queue, removeVideo, addVideo, socket }) => {
           onChange={handleTextChange}
           placeholder="Queue Up A Video!"
           value={input}
-          onKeyPress={submitToQueue}
+          onKeyPress={handleKeyEnter}
         ></Input>
         <Add
           type="submit"
           className="fas fa-plus-circle"
           aria-hidden="true"
-          onClick={() => {
-            addVideo(input);
-            setInput('');
-          }}
+          onClick={handleClick}
         ></Add>
       </InputBar>
       <UrlContainer>

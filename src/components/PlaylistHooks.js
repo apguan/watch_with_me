@@ -3,6 +3,10 @@ import { useState } from "react";
 const PlaylistHooks = () => {
   const [queue, setQueue] = useState([]);
 
+  const syncVideos = videos => {
+    setQueue(videos);
+  };
+
   const addVideo = input => {
     if (input.length) {
       let newQueue = queue.concat(input);
@@ -30,7 +34,8 @@ const PlaylistHooks = () => {
     queue,
     removeVideo,
     addVideo,
-    dequeueVideo
+    dequeueVideo,
+    syncVideos
   };
 };
 

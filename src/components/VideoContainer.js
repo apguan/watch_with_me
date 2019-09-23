@@ -40,7 +40,7 @@ class VideoContainer extends Component {
     if (!window.YT) {
       const tag = document.createElement("script");
       tag.src = "https://www.youtube.com/iframe_api";
-      console.log(window.onYouTubeIframeAPIReady);
+
       window.onYouTubeIframeAPIReady = this.loadVideo;
       const firstScriptTag = document.getElementsByTagName("script")[0];
       firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
@@ -72,7 +72,7 @@ class VideoContainer extends Component {
   };
 
   onPlayerStateChange = event => {
-    if (event.data == window.YT.PlayerState.ENDED) {
+    if (event.data === window.YT.PlayerState.ENDED) {
       this.nextVideo();
     }
   };
