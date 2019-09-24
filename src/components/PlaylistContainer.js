@@ -8,18 +8,8 @@ import {
 
 import { Input, UrlText, Remove, Add } from "./styled_components/components";
 
-const PlaylistContainer = ({
-  queue,
-  removeVideo,
-  addVideo,
-  syncVideos,
-  socket
-}) => {
+const PlaylistContainer = ({ queue, removeVideo, addVideo }) => {
   const [input, setInput] = useState([]);
-
-  socket.on("queue", data => {
-    syncVideos(data);
-  });
 
   const handleTextChange = e => {
     e.preventDefault();
@@ -29,19 +19,17 @@ const PlaylistContainer = ({
   const handleClick = e => {
     addVideo(input);
     setInput("");
-    socket.emit("queue", input);
   };
 
   const handleKeyEnter = e => {
     if (e.which === 13) {
       addVideo(input);
       setInput("");
-      socket.emit("queue", input);
     }
   };
 
   return (
-    <Window width={20} minWidth={275}>
+    <Window width={15} minWidth={225}>
       <InputBar>
         <Input
           onChange={handleTextChange}
@@ -62,7 +50,7 @@ const PlaylistContainer = ({
             <Url key={idx}>
               <UrlText value={`${idx + 1}: ` + val} disabled></UrlText>
               <Remove
-                onClick={() => removeVideo(val)}
+                onClick={() => removeVideo(idx)}
                 className="fa fa-minus-circle"
                 aria-hidden="true"
               ></Remove>

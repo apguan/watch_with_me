@@ -17,7 +17,6 @@ let roomDetails = {};
 
 io.on("connect", socket => {
   let room = socket.handshake["query"]["r_var"];
-  socket.join(room);
 
   if (!roomDetails[room]) {
     roomDetails[room] = {
@@ -27,23 +26,55 @@ io.on("connect", socket => {
     };
   }
 
-  console.log("user joined room " + room, roomDetails[room]);
   let details = roomDetails[room];
+
+  socket.join(room, () => {
+    console.log(details);
+    socket.to(room).emit("sync playlist", {
+      action: "sync",
+      payload: details.queue
+    });
+
+    socket.to(room).emit("sync messages", details.messages);
+    socket.to(room).emit("sync video details", details.videoDetails);
+  });
 
   socket.on("message", msg => {
     details.messages.push(msg);
-    io.to(room).emit("message", details.messages);
+    socket.to(room).emit("sync messages", details.messages);
   });
 
-  socket.on("queue", videos => {
-    details.queue.push(videos);
-    console.log(details);
-    io.to(room).emit("queue", details.queue);
+  socket.on("queue", video => {
+    details.queue.push(video);
+    socket.to(room).broadcast.emit("sync playlist", {
+      action: "sync",
+      payload: video
+    });
+  });
+
+  socket.on("remove", idx => {
+    let newArr = details.queue
+      .slice(0, idx)
+      .concat(details.queue.slice(idx + 1));
+    details.queue = newArr;
+    socket.to(room).broadcast.emit("sync playlist", {
+      action: "sync",
+      payload: idx
+    });
+  });
+
+  socket.on("dequeue", () => {
+    console.log("dequeue before: ", details.queue);
+    details.queue.shift();
+    console.log("dequeue after: ", details.queue);
+    socket.to(room).broadcast.emit("sync playlist", {
+      action: "dequeue"
+    });
   });
 
   socket.on("video details", details => {
     details.videoDetails = details;
-    io.to(room).emit("video details", details);
+    socket.to(room).emit("sync video player", details.videoDetails);
   });
 
   socket.on("disconnect", function() {
@@ -53,5 +84,5 @@ io.on("connect", socket => {
 });
 
 http.listen(4000, () => {
-  console.log("listening on *:4000");
+  console.log("listening on 4000");
 });

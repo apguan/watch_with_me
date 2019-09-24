@@ -38,6 +38,7 @@ class VideoContainer extends Component {
 
   createIframeTag = () => {
     if (!window.YT) {
+      console.log("doing shit");
       const tag = document.createElement("script");
       tag.src = "https://www.youtube.com/iframe_api";
 
@@ -50,6 +51,9 @@ class VideoContainer extends Component {
   };
 
   loadVideo = () => {
+    clearInterval(this.state.interval);
+    this.setState({ currTime: 0 });
+
     let videoId = this.parseVideoId(this.props.queue[0]);
 
     this.player = new window.YT.Player(`video-player`, {
