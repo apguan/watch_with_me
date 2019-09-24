@@ -17,6 +17,7 @@ export const Window = styled.div`
   min-width: ${props => props.minWidth || 100}px;
   margin: 15px;
   min-height: 450px;
+  border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
@@ -64,4 +65,12 @@ export const ButtonsContainer = styled.div`
 //chat container stuff
 export const ChatWindow = styled.div`
   height: 100%;
+  overflow: auto:
+`;
+
+export const ChatInputContainer = styled.div`
+  width: 100%;
+  display: inline-flex;
+  border-top: 2px solid #5b5b5b;
+  height: 5em;
 `;

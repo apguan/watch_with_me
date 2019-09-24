@@ -6,15 +6,11 @@ import ChatBarContainer from "./ChatBarContainer";
 import PlaylistContainer from "./PlaylistContainer";
 
 import PlaylistHooks from "./PlaylistHooks";
+import { Sockets } from "./Socket";
 
 const Main = () => {
-  const {
-    queue,
-    removeVideo,
-    addVideo,
-    dequeueVideo,
-    socket
-  } = PlaylistHooks();
+  const { socket } = Sockets(window.location.pathname);
+  const { queue, removeVideo, addVideo, dequeueVideo } = PlaylistHooks(socket);
 
   return (
     <MainContainer>
@@ -28,7 +24,7 @@ const Main = () => {
         queue={queue}
         dequeueVideo={dequeueVideo}
       />
-      <ChatBarContainer />
+      <ChatBarContainer socket={socket} />
     </MainContainer>
   );
 };

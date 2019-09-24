@@ -22,7 +22,6 @@ class VideoContainer extends Component {
     currTime: 0,
     scrubTime: 0,
     videoId: null,
-    play: true,
     ready: false
   };
 
@@ -75,26 +74,26 @@ class VideoContainer extends Component {
 
   loadVideo = () => {
     clearInterval(this.state.interval);
-    this.setState({ currTime: 0 });
+    this.setState({ currTime: 0 }, () => {
+      let videoId = this.parseVideoId(this.props.queue[0]);
 
-    let videoId = this.parseVideoId(this.props.queue[0]);
-
-    this.player = new window.YT.Player(`video-player`, {
-      videoId: videoId,
-      playerVars: {
-        autoplay: 0,
-        rel: 0,
-        showinfo: 1,
-        egm: 0,
-        showsearch: 1,
-        controls: 0,
-        modestbranding: 0
-      },
-      events: {
-        onReady: this.onPlayerReady,
-        onPlaybackQualityChange: this.onPlayerPlaybackQualityChange,
-        onStateChange: this.onPlayerStateChange
-      }
+      this.player = new window.YT.Player(`video-player`, {
+        videoId: videoId,
+        playerVars: {
+          autoplay: 0,
+          rel: 0,
+          showinfo: 1,
+          egm: 0,
+          showsearch: 1,
+          controls: 0,
+          modestbranding: 0
+        },
+        events: {
+          onReady: this.onPlayerReady,
+          onPlaybackQualityChange: this.onPlayerPlaybackQualityChange,
+          onStateChange: this.onPlayerStateChange
+        }
+      });
     });
   };
 
@@ -156,7 +155,6 @@ class VideoContainer extends Component {
   };
 
   progressBar = () => {
-    console.log("function is hit");
     let interval = setInterval(() => {
       this.setState({
         currTime: this.player.getCurrentTime()

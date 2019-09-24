@@ -88,18 +88,38 @@ export const ChatTitle = styled.p`
 `;
 
 export const ChatInput = styled.textarea`
+  position: relative;
+  width: 100%;
   border: none;
-  border-top: 2px solid #5b5b5b;
   bottom: 0;
   height: 5em;
   resize: none;
-  text-indent: 8px;
+  border-radius: 5px;
   font-family: "Titillium Web", sans-serif;
 
   &:focus {
     outline: none;
     border: 1px solid #6d69d3;
     animation: ${fadeIn} 0.5s linear;
+  }
+`;
+
+export const SendButton = styled.button`
+  position: absolute:
+  border: none;
+  height: 100%;
+  color: white;
+  font-weight: bold;
+  background-color: #696969;
+  font-family: "Titillium Web", sans-serif;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:hover {
+    background-color: #787878;
+    cursor: pointer;asdfa
   }
 `;
 

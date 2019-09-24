@@ -9,12 +9,9 @@ app.use(express.static(path.join(__dirname, "build")));
 
 app.get("/", (req, res) => {});
 
-let roomDetails = {};
+app.get("/:roomId", (req, res) => {});
 
-app.get("/:roomId", (req, res) => {
-  // let room = req.params.roomId;
-  // res.send();
-});
+let roomDetails = {};
 
 io.on("connect", socket => {
   let room = socket.handshake["query"]["r_var"];
@@ -30,28 +27,24 @@ io.on("connect", socket => {
   let details = roomDetails[room];
 
   socket.join(room, () => {
-    console.log(details.queue);
-    // socket.to(room).emit("sync messages", details.messages);
-    // socket.to(room).emit("sync video details", details.videoDetails);
+    console.log(details);
+    io.to(room).emit("sync playlist", {
+      action: "sync",
+      payload: details.queue
+    });
+    io.to(room).emit("sync messages", details.messages);
+    io.to(room).emit("sync video details", details.videoDetails);
   });
 
-  socket.on("sync playlist", initial => {
-    if (initial) {
-      socket.to(room).emit("sync playlist", {
-        action: "sync",
-        payload: details.queue
-      });
-    }
-  });
-
-  socket.on("message", msg => {
+  socket.on("messages", msg => {
     details.messages.push(msg);
-    socket.to(room).emit("sync messages", details.messages);
+    console.log(msg, details.messages);
+    io.to(room).emit("sync messages", details.messages);
   });
 
   socket.on("queue", video => {
     details.queue.push(video);
-    socket.to(room).broadcast.emit("sync playlist", {
+    io.to(room).emit("sync playlist", {
       action: "queue",
       payload: video
     });
@@ -62,7 +55,7 @@ io.on("connect", socket => {
       .slice(0, idx)
       .concat(details.queue.slice(idx + 1));
     details.queue = newArr;
-    socket.to(room).broadcast.emit("sync playlist", {
+    io.to(room).emit("sync playlist", {
       action: "remove",
       payload: idx
     });
@@ -70,15 +63,14 @@ io.on("connect", socket => {
 
   socket.on("dequeue", () => {
     details.queue.shift();
-    socket.to(room).broadcast.emit("sync playlist", {
+    io.to(room).emit("sync playlist", {
       action: "dequeue"
     });
   });
 
   socket.on("video details", playback => {
-    console.log(playback);
     details.videoDetails = playback;
-    socket.to(room).emit("video details", playback);
+    io.to(room).emit("video details", playback);
   });
 
   socket.on("disconnect", function() {

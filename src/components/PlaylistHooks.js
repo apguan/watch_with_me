@@ -1,9 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import { Sockets } from "./Socket";
 import _ from "lodash";
 
-const PlaylistHooks = props => {
-  const { socket } = Sockets(window.location.pathname);
+const PlaylistHooks = socket => {
   const [queue, setQueue] = useState([]);
 
   const syncVideo = useCallback(
@@ -82,8 +80,7 @@ const PlaylistHooks = props => {
     queue,
     removeVideo,
     addVideo,
-    dequeueVideo,
-    socket
+    dequeueVideo
   };
 };
 

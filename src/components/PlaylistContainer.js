@@ -22,7 +22,7 @@ const PlaylistContainer = ({ queue, removeVideo, addVideo }) => {
   };
 
   const handleKeyEnter = e => {
-    if (e.which === 13) {
+    if (e.key === "Enter") {
       addVideo(input);
       setInput("");
     }
