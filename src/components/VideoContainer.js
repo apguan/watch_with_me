@@ -28,6 +28,26 @@ class VideoContainer extends Component {
 
   componentDidMount = () => {
     this.createIframeTag();
+
+    this.props.socket.on("video details", ({ currTime, action }) => {
+      console.log(currTime, action);
+      clearInterval(this.state.interval);
+      switch (action) {
+        case "play":
+          this.player.seekTo(currTime);
+          this.player.playVideo();
+          this.progressBar();
+          break;
+        case "pause":
+          this.player.pauseVideo();
+          break;
+        case "update":
+          this.player.seekTo(currTime);
+          this.progressBar();
+        default:
+          break;
+      }
+    });
   };
 
   componentDidUpdate(nextProps) {
@@ -36,9 +56,12 @@ class VideoContainer extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.socket.off("video details");
+  }
+
   createIframeTag = () => {
     if (!window.YT) {
-      console.log("doing shit");
       const tag = document.createElement("script");
       tag.src = "https://www.youtube.com/iframe_api";
 
@@ -93,12 +116,20 @@ class VideoContainer extends Component {
   };
 
   playVideo = () => {
+    this.props.socket.emit("video details", {
+      currTime: this.state.currTime,
+      action: "play"
+    });
     this.player.playVideo();
     this.progressBar();
   };
 
   pauseVideo = () => {
     clearInterval(this.state.interval);
+    this.props.socket.emit("video details", {
+      currTime: this.state.currTime,
+      action: "pause"
+    });
     this.player.pauseVideo();
   };
 
@@ -114,12 +145,18 @@ class VideoContainer extends Component {
     const totalWidth = rect.width - 1; //subtract borders
     const newCurrTime = (x / totalWidth) * this.state.time;
 
+    this.props.socket.emit("video details", {
+      currTime: newCurrTime,
+      action: "update"
+    });
+
     clearInterval(this.state.interval);
     this.player.seekTo(newCurrTime);
     this.progressBar();
   };
 
   progressBar = () => {
+    console.log("function is hit");
     let interval = setInterval(() => {
       this.setState({
         currTime: this.player.getCurrentTime()

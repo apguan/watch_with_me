@@ -6,14 +6,14 @@ const PlaylistHooks = props => {
   const { socket } = Sockets(window.location.pathname);
   const [queue, setQueue] = useState([]);
 
-  // const syncVideo = useCallback(
-  //   newQueue => {
-  //     if (!_.isEqual(queue, newQueue)) {
-  //       setQueue(newQueue);
-  //     }
-  //   },
-  //   [queue]
-  // );
+  const syncVideo = useCallback(
+    newQueue => {
+      if (!_.isEqual(queue, newQueue)) {
+        setQueue(newQueue);
+      }
+    },
+    [queue]
+  );
 
   const addVideo = useCallback(
     input => {
@@ -47,20 +47,22 @@ const PlaylistHooks = props => {
       console.log(action, payload);
       switch (action) {
         case "sync":
-          console.log("synced", payload);
-          setQueue([...payload]);
+          console.log("synced", action, payload);
+          syncVideo([...payload]);
           break;
         case "queue":
+          console.log("queued", action, payload);
           let addQueue = queue.concat(payload);
-          console.log(addQueue);
           setQueue(addQueue);
           break;
         case "dequeue":
+          console.log("dequeued", action, payload);
           let dequeue = queue.slice();
           dequeue.shift();
           setQueue(dequeue);
           break;
         case "remove":
+          console.log("remove", action, payload);
           let removeQueue = queue
             .slice(0, payload)
             .concat(queue.slice(payload + 1));
@@ -74,7 +76,7 @@ const PlaylistHooks = props => {
     return () => {
       socket.off("sync playlist");
     };
-  }, [socket, setQueue]);
+  }, [socket, queue, syncVideo]);
 
   return {
     queue,

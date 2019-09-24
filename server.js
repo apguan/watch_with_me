@@ -9,11 +9,12 @@ app.use(express.static(path.join(__dirname, "build")));
 
 app.get("/", (req, res) => {});
 
-app.get("/:roomId", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
-
 let roomDetails = {};
+
+app.get("/:roomId", (req, res) => {
+  // let room = req.params.roomId;
+  // res.send();
+});
 
 io.on("connect", socket => {
   let room = socket.handshake["query"]["r_var"];
@@ -29,14 +30,18 @@ io.on("connect", socket => {
   let details = roomDetails[room];
 
   socket.join(room, () => {
-    console.log(details);
-    socket.to(room).emit("sync playlist", {
-      action: "sync",
-      payload: details.queue
-    });
+    console.log(details.queue);
+    // socket.to(room).emit("sync messages", details.messages);
+    // socket.to(room).emit("sync video details", details.videoDetails);
+  });
 
-    socket.to(room).emit("sync messages", details.messages);
-    socket.to(room).emit("sync video details", details.videoDetails);
+  socket.on("sync playlist", initial => {
+    if (initial) {
+      socket.to(room).emit("sync playlist", {
+        action: "sync",
+        payload: details.queue
+      });
+    }
   });
 
   socket.on("message", msg => {
@@ -47,7 +52,7 @@ io.on("connect", socket => {
   socket.on("queue", video => {
     details.queue.push(video);
     socket.to(room).broadcast.emit("sync playlist", {
-      action: "sync",
+      action: "queue",
       payload: video
     });
   });
@@ -58,23 +63,22 @@ io.on("connect", socket => {
       .concat(details.queue.slice(idx + 1));
     details.queue = newArr;
     socket.to(room).broadcast.emit("sync playlist", {
-      action: "sync",
+      action: "remove",
       payload: idx
     });
   });
 
   socket.on("dequeue", () => {
-    console.log("dequeue before: ", details.queue);
     details.queue.shift();
-    console.log("dequeue after: ", details.queue);
     socket.to(room).broadcast.emit("sync playlist", {
       action: "dequeue"
     });
   });
 
-  socket.on("video details", details => {
-    details.videoDetails = details;
-    socket.to(room).emit("sync video player", details.videoDetails);
+  socket.on("video details", playback => {
+    console.log(playback);
+    details.videoDetails = playback;
+    socket.to(room).emit("video details", playback);
   });
 
   socket.on("disconnect", function() {
