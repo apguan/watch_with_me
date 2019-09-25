@@ -3,6 +3,7 @@ import _ from "lodash";
 
 const PlaylistHooks = socket => {
   const [queue, setQueue] = useState([]);
+  const [initial, setInital] = useState(false);
 
   const syncVideo = useCallback(
     newQueue => {
@@ -34,6 +35,17 @@ const PlaylistHooks = socket => {
   }, [socket]);
 
   useEffect(() => {
+    if (!initial) {
+      socket.emit("initial sync");
+      socket.on("initial sync", intialData => {
+        console.log("queue: ", intialData.queue);
+        syncVideo(intialData.queue);
+        setInital(true);
+      });
+
+      socket.off("initial sync");
+    }
+
     socket.on("sync playlist", newQueue => {
       console.log("queue: ", newQueue);
       syncVideo(newQueue);
@@ -42,7 +54,7 @@ const PlaylistHooks = socket => {
     return () => {
       socket.off("sync playlist");
     };
-  }, [socket, queue, syncVideo]);
+  }, [socket, queue, syncVideo, initial, setInital]);
 
   return {
     queue,

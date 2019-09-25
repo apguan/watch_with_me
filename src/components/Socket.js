@@ -8,7 +8,11 @@ let connectSocket = function(room) {
 };
 
 export const Sockets = roomId => {
-  const [socket] = useState(connectSocket(roomId.slice(1)).connect());
+  const [socket] = useState(
+    connectSocket(roomId.slice(1)).connect(data => {
+      console.log("connected:", data);
+    })
+  );
 
   return {
     socket

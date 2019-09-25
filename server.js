@@ -48,10 +48,20 @@ io.on("connect", socket => {
   let details = roomDetails[room];
 
   socket.join(room, () => {
-    console.log(details);
-    io.to(room).volatile.emit("sync playlist", details.queue);
-    io.to(room).volatile.emit("sync messages", details.messages);
-    io.to(room).volatile.emit("sync video details", details.videoDetails);
+    console.log(
+      details.queue,
+      details.messages,
+      details.videoDetails,
+      socket.id
+    );
+
+    io.to(room).emit("sync playlist", details.queue);
+    io.to(room).emit("sync messages", details.messages);
+    io.to(room).emit("sync video details", details.videoDetails);
+  });
+
+  socket.on("initial sync", () => {
+    io.to(room).emit("initial sync", details);
   });
 
   socket.on("messages", msg => {

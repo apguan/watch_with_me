@@ -1,16 +1,22 @@
 import { useState, useEffect, useCallback } from "react";
 import _ from "lodash";
-import generate from "project-name-generator";
+import { uniqueNamesGenerator } from "unique-names-generator";
 import uuidv1 from "uuid/v1";
 
-const name = generate()
-  .spaced.split(" ")
+const UniqueNamesGeneratorConfig = {
+  separator: " ",
+  length: 3
+};
+
+const randomName = uniqueNamesGenerator(UniqueNamesGeneratorConfig)
+  .split(" ")
   .map(str => str[0].toUpperCase() + str.slice(1))
   .join(" ");
 
 const ChatHooks = socket => {
-  const [nickName] = useState(name);
+  const [nickName] = useState(randomName);
   const [messages, setMessages] = useState([]);
+  const [initial, setInital] = useState(false);
 
   const addMessage = useCallback(
     msg => {
@@ -36,6 +42,17 @@ const ChatHooks = socket => {
   );
 
   useEffect(() => {
+    if (!initial) {
+      socket.emit("initial sync");
+      socket.on("initial sync", intialData => {
+        console.log("messages: ", intialData.messages);
+        syncMessages(intialData.messages);
+        setInital(true);
+      });
+
+      socket.off("initial sync");
+    }
+
     socket.on("sync messages", incomingMsg => {
       console.log("messages: ", incomingMsg);
       syncMessages(incomingMsg);
@@ -44,7 +61,7 @@ const ChatHooks = socket => {
     return () => {
       socket.off("sync messages");
     };
-  }, [syncMessages, socket, messages]);
+  }, [syncMessages, socket, messages, initial, setInital]);
 
   return {
     messages,
