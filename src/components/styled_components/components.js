@@ -5,7 +5,7 @@ import { fadeIn } from "./animations.js";
 export const UrlText = styled.div`
   border: none;
   margin: 10px 2px;
-  width: 53%;
+  width: 50%;
   font-family: "Titillium Web", sans-serif;
   font-size: 12px;
   font-weight: bold;
@@ -94,7 +94,9 @@ export const ChatInput = styled.textarea`
 
 export const SendButton = styled.i`
   position: absolute:
-  height: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 6px 0;
 
   &:hover {
     color: #5c7cfa;
@@ -135,7 +137,7 @@ export const ChatBubble = styled.div`
   background-color: ${props => props.background};
   float: ${props => props.side};
   line-height: 1em;
-  font-size: 16px;
+  font-size: 10px;
   color: black;
   margin: 5px;
   padding: 5px;
@@ -146,8 +148,17 @@ export const ChatBubble = styled.div`
   clear: both;
 `;
 
-export const TimeText = styled.p`
+export const Name = styled.p`
+  margin: 0 0 10px 0;
+  text-decoration: underline;
   text-align: left;
+  font-family: "Titillium Web", sans-serif;
+  font-size: 12px;
+  color: black;
+`;
+
+export const TimeText = styled.p`
+  text-align: ${props => props.timePosition};
   line-height: 1em;
   font-family: "Titillium Web", sans-serif;
   font-size: 8px;

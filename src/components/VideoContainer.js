@@ -33,11 +33,15 @@ class VideoContainer extends Component {
 
   componentDidMount = () => {
     this.createIframeTag();
-
     this.props.socket.on("video details", ({ currTime, action }) => {
       console.log(currTime, action);
       clearInterval(this.state.interval);
       switch (action) {
+        case "restart":
+          this.player.seekTo(currTime);
+          this.player.playVideo();
+          this.progressBar();
+          break;
         case "play":
           this.player.seekTo(currTime);
           this.player.playVideo();
@@ -121,6 +125,14 @@ class VideoContainer extends Component {
       },
       () => this.progressBar()
     );
+  };
+
+  restart = () => {
+    this.props.socket.emit("video details", {
+      currTime: 0,
+      action: "restart"
+    });
+    this.player.seekTo(0);
   };
 
   playVideo = () => {
@@ -220,7 +232,7 @@ class VideoContainer extends Component {
             </TimeStamp>
             <ButtonsContainer>
               <PlayButtons
-                onClick={() => this.player.seekTo(0)}
+                onClick={this.restart}
                 className="fas fa-backward"
                 aria-hidden="true"
               ></PlayButtons>

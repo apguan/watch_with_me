@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ta from "time-ago";
 
 import ChatHooks from "./ChatHooks";
@@ -13,7 +13,8 @@ import {
   ChatInput,
   SendButton,
   ChatBubble,
-  TimeText
+  TimeText,
+  Name
 } from "./styled_components/components";
 
 const ChatBarContainer = ({ socket }) => {
@@ -27,19 +28,13 @@ const ChatBarContainer = ({ socket }) => {
   };
 
   const scrollToRef = ref => {
-    console.log(ref.current.offsetTop);
-    // window.scrollTo({
-    //   top: ref.current.offsetTop,
-    //   left: 100,
-    //   behavior: "smooth"
-    // });
+    ref.current.scrollTop = ref.current.scrollHeight;
   };
 
   const handleSubmit = () => {
     if (input.length) {
       addMessage(input);
       setInput("");
-      scrollToRef(scrollRef);
     }
   };
 
@@ -50,6 +45,10 @@ const ChatBarContainer = ({ socket }) => {
     }
   };
 
+  useEffect(() => {
+    return () => scrollToRef(scrollRef);
+  }, [scrollRef, scrollToRef]);
+
   return (
     <Window width={20} minWidth={225}>
       <ChatTitle>Hello, {nickName}</ChatTitle>
@@ -58,17 +57,21 @@ const ChatBarContainer = ({ socket }) => {
           if (nickName === name) {
             return (
               <ChatBubble background={"#b4c4da"} side={"right"} key={uuid}>
+                <Name>Me</Name>
                 {message}
-                <TimeText>{ta.ago(new Date(timeStamp) - 1000)}</TimeText>
+                <TimeText timePosition={"right"}>
+                  {ta.ago(new Date(timeStamp) - 1000)}
+                </TimeText>
               </ChatBubble>
             );
           } else {
             return (
               <ChatBubble background={"#5c7cfa"} side={"left"} key={uuid}>
-                {name}:
-                <br />
+                <Name>{name}</Name>
                 {message}
-                <TimeText>{ta.ago(new Date(timeStamp) - 1000)}</TimeText>
+                <TimeText timePosition={"left"}>
+                  {ta.ago(new Date(timeStamp) - 1000)}
+                </TimeText>
               </ChatBubble>
             );
           }

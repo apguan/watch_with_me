@@ -49,9 +49,9 @@ io.on("connect", socket => {
 
   socket.join(room, () => {
     console.log(details);
-    io.to(room).emit("sync playlist", details.queue);
-    io.to(room).emit("sync messages", details.messages);
-    io.to(room).emit("sync video details", details.videoDetails);
+    io.to(room).volatile.emit("sync playlist", details.queue);
+    io.to(room).volatile.emit("sync messages", details.messages);
+    io.to(room).volatile.emit("sync video details", details.videoDetails);
   });
 
   socket.on("messages", msg => {
