@@ -2,24 +2,17 @@ import styled from "styled-components";
 import { fadeIn } from "./animations.js";
 
 //need to use input to allow for proper overflow
-export const UrlText = styled.textarea`
+export const UrlText = styled.div`
   border: none;
   margin: 0 2px;
   width: 53%;
   font-family: "Titillium Web", sans-serif;
+  font-size: 12px;
   font-weight: bold;
-  resize: none;
-
-  &::-webkit-input-placeholder {
-    line-height: 1em;
-    font-family: "Titillium Web", sans-serif;
-    font-size: 16px;
-    color: #5b5b5b;
-  }
-
-  &:focus {
-    outline: none;
-  }
+  height: 50px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const Input = styled.input`

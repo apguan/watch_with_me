@@ -49,7 +49,7 @@ const PlaylistContainer = ({ queue, removeVideo, addVideo }) => {
           return (
             <VideoPreview key={idx}>
               <img src={thumbnail} height="39px" width="70px"></img>
-              <UrlText value={title} disabled></UrlText>
+              <UrlText>{title}</UrlText>
               <Remove
                 onClick={() => removeVideo(idx)}
                 className="fa fa-minus-circle"
