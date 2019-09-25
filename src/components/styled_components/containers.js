@@ -16,7 +16,7 @@ export const Window = styled.div`
   width: ${props => props.width}vw;
   min-width: ${props => props.minWidth || 100}px;
   margin: 15px;
-  min-height: 450px;
+  height: 500px;
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
@@ -34,10 +34,12 @@ export const UrlContainer = styled.div`
   overflow: auto;
 `;
 
-export const Url = styled.div`
-  height: 20px;
+export const VideoPreview = styled.div`
+  display: inline-flex;
+  width: 100%;
+  justify-content: center;
+  height: 50px;
   position: relative;
-  padding: 4px;
   margin: 5px 0;
   text-align: left;
 `;
@@ -64,8 +66,9 @@ export const ButtonsContainer = styled.div`
 
 //chat container stuff
 export const ChatWindow = styled.div`
-  height: 100%;
-  overflow: auto:
+  display: inline-block;
+  width: 100%;
+  overflow: auto;
 `;
 
 export const ChatInputContainer = styled.div`

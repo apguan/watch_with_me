@@ -2,13 +2,13 @@ import styled from "styled-components";
 import { fadeIn } from "./animations.js";
 
 //need to use input to allow for proper overflow
-export const UrlText = styled.input`
-  position: relative;
+export const UrlText = styled.textarea`
   border: none;
-  margin: 0 10px;
-  width: 75%;
-  vertical-align: middle;
+  margin: 0 2px;
+  width: 53%;
   font-family: "Titillium Web", sans-serif;
+  font-weight: bold;
+  resize: none;
 
   &::-webkit-input-placeholder {
     line-height: 1em;
@@ -64,10 +64,9 @@ export const Add = styled.i`
 export const Remove = styled.i`
   border: none;
   background-color: none;
+  padding-top: 2px;
   float: right;
-  height: 20px;
-  width: 20px;
-  margin: 5px 3px 0 0;
+  margin: 9px 3px 9px 0;
 
   &:hover {
     cursor: pointer;
@@ -148,4 +147,42 @@ export const PlayButtons = styled.i`
 export const TimeStamp = styled.p`
   margin: 0;
   text-align: center;
+`;
+
+export const MyChatBubble = styled.div`
+  position: relative;
+  background-color: #b4c4da;
+  margin: 4px;
+  padding: 5px;
+  max-width: 75%;
+  float: right;
+  text-align: justify;
+  overflow-wrap: break-word;
+`;
+
+export const TheirChatBubble = styled.div`
+  position: relative;
+  background-color: #3386ff;
+  margin: 5px;
+  padding: 5px;
+  max-width: 75%;
+  float: left;
+  text-align: justify;
+  overflow-wrap: break-word;
+`;
+
+export const ChatText = styled.p`
+  height: 100%;
+  line-height: 1em;
+  font-family: "Titillium Web", sans-serif;
+  font-size: 16px;
+  color: black;
+`;
+
+export const TimeText = styled.p`
+  text-align: left;
+  line-height: 1em;
+  font-family: "Titillium Web", sans-serif;
+  font-size: 8px;
+  color: black;
 `;

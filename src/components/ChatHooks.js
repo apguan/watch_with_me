@@ -1,8 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
+import _ from "lodash";
 import generate from "project-name-generator";
 import uuidv1 from "uuid/v1";
 
-const name = generate().spaced;
+const name = generate()
+  .spaced.split(" ")
+  .map(str => str[0].toUpperCase() + str.slice(1))
+  .join(" ");
 
 const ChatHooks = socket => {
   const [nickName] = useState(name);
@@ -19,19 +23,21 @@ const ChatHooks = socket => {
 
       socket.emit("messages", message);
     },
-    [socket]
+    [socket, nickName]
   );
 
   const syncMessages = useCallback(
-    messages => {
-      setMessages(messages);
+    newMessages => {
+      if (!_.isEqual(messages, newMessages)) {
+        setMessages(newMessages);
+      }
     },
-    [setMessages]
+    [setMessages, messages]
   );
 
   useEffect(() => {
     socket.on("sync messages", incomingMsg => {
-      console.log(incomingMsg);
+      console.log("messages: ", incomingMsg);
       syncMessages(incomingMsg);
     });
 

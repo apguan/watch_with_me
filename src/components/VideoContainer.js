@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import _ from "lodash";
+
 import {
   Window,
   ButtonsContainer,
@@ -21,8 +23,12 @@ class VideoContainer extends Component {
     time: 0,
     currTime: 0,
     scrubTime: 0,
-    videoId: null,
-    ready: false
+    ready: false,
+    currentVideo: {
+      videoId: null,
+      title: null,
+      thumbnail: null
+    }
   };
 
   componentDidMount = () => {
@@ -43,21 +49,22 @@ class VideoContainer extends Component {
         case "update":
           this.player.seekTo(currTime);
           this.progressBar();
+          break;
         default:
           break;
       }
     });
   };
 
-  componentDidUpdate(nextProps) {
-    if (nextProps.queue[0] !== this.props.queue[0]) {
+  componentDidUpdate = nextProps => {
+    if (!_.isEqual(nextProps.queue[0], this.props.queue[0])) {
       this.createIframeTag();
     }
-  }
+  };
 
-  componentWillUnmount() {
+  componentWillUnmount = () => {
     this.props.socket.off("video details");
-  }
+  };
 
   createIframeTag = () => {
     if (!window.YT) {
@@ -74,9 +81,11 @@ class VideoContainer extends Component {
 
   loadVideo = () => {
     clearInterval(this.state.interval);
-    this.setState({ currTime: 0 }, () => {
-      let videoId = this.parseVideoId(this.props.queue[0]);
+    const videoId = this.props.queue.length
+      ? this.props.queue[0].videoId
+      : this.state.currentVideo.videoId;
 
+    this.setState({ currTime: 0 }, () => {
       this.player = new window.YT.Player(`video-player`, {
         videoId: videoId,
         playerVars: {
@@ -175,27 +184,19 @@ class VideoContainer extends Component {
     this.setState({ scrubTime: newCurrTime });
   };
 
-  parseVideoId = url => {
-    if (url) {
-      let regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-      let match = url.match(regExp);
-      if (match && match[2].length === 11) {
-        return match[2];
-      }
-    }
-  };
-
   secondsToTime = time => {
     let date = new Date(null);
-    date.setSeconds(time); // specify value for SECONDS here
+    date.setSeconds(time);
     let timeString = date.toISOString().substr(11, 8);
 
     return timeString;
   };
 
   render = () => {
-    const { currTime, time, scrubTime, ready } = this.state;
-    const videoId = this.parseVideoId(this.props.queue[0]);
+    const { currTime, time, scrubTime, ready, currentVideo } = this.state;
+    const videoId = this.props.queue.length
+      ? this.props.queue[0].videoId
+      : this.state.currentVideo.videoId;
 
     return (
       <Window width={50} minWidth={500}>

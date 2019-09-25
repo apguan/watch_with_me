@@ -3,7 +3,7 @@ import {
   Window,
   InputBar,
   UrlContainer,
-  Url
+  VideoPreview
 } from "./styled_components/containers";
 
 import { Input, UrlText, Remove, Add } from "./styled_components/components";
@@ -45,16 +45,17 @@ const PlaylistContainer = ({ queue, removeVideo, addVideo }) => {
         ></Add>
       </InputBar>
       <UrlContainer>
-        {queue.map((val, idx) => {
+        {queue.map(({ title, thumbnail }, idx) => {
           return (
-            <Url key={idx}>
-              <UrlText value={`${idx + 1}: ` + val} disabled></UrlText>
+            <VideoPreview key={idx}>
+              <img src={thumbnail} height="39px" width="70px"></img>
+              <UrlText value={title} disabled></UrlText>
               <Remove
                 onClick={() => removeVideo(idx)}
                 className="fa fa-minus-circle"
                 aria-hidden="true"
               ></Remove>
-            </Url>
+            </VideoPreview>
           );
         })}
       </UrlContainer>

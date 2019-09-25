@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ta from "time-ago";
 
 import ChatHooks from "./ChatHooks";
@@ -11,7 +11,11 @@ import {
 import {
   ChatTitle,
   ChatInput,
-  SendButton
+  SendButton,
+  MyChatBubble,
+  TheirChatBubble,
+  ChatText,
+  TimeText
 } from "./styled_components/components";
 
 const ChatBarContainer = ({ socket }) => {
@@ -41,14 +45,23 @@ const ChatBarContainer = ({ socket }) => {
       <ChatTitle>Hello, {nickName}</ChatTitle>
       <ChatWindow>
         {messages.map(({ name, message, timeStamp }) => {
-          return (
-            <div key={timeStamp}>
-              <p>
-                {name} at {ta.ago(new Date(timeStamp))}
-              </p>
-              <p>{message}</p>
-            </div>
-          );
+          if (nickName === name) {
+            return (
+              <MyChatBubble>
+                {message}
+                <TimeText>{ta.ago(new Date(timeStamp) + 1000)}</TimeText>
+              </MyChatBubble>
+            );
+          } else {
+            return (
+              <TheirChatBubble>
+                {message}
+                <TimeText>
+                  {name}:{ta.ago(new Date(timeStamp) + 1000)}
+                </TimeText>
+              </TheirChatBubble>
+            );
+          }
         })}
       </ChatWindow>
       <ChatInputContainer>
