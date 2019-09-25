@@ -88,36 +88,24 @@ export const ChatTitle = styled.p`
 
 export const ChatInput = styled.textarea`
   position: relative;
-  width: 100%;
+  width: 85%;
   border: none;
   bottom: 0;
-  height: 5em;
+  height: 4em;
   resize: none;
-  border-radius: 5px;
   font-family: "Titillium Web", sans-serif;
-
+  padding-left: 5px;
   &:focus {
     outline: none;
-    border: 1px solid #6d69d3;
-    animation: ${fadeIn} 0.5s linear;
   }
 `;
 
-export const SendButton = styled.button`
+export const SendButton = styled.i`
   position: absolute:
-  border: none;
   height: 100%;
-  color: white;
-  font-weight: bold;
-  background-color: #696969;
-  font-family: "Titillium Web", sans-serif;
-
-  &:focus {
-    outline: none;
-  }
 
   &:hover {
-    background-color: #787878;
+    color: #5c7cfa;
     cursor: pointer;asdfa
   }
 `;
@@ -149,34 +137,21 @@ export const TimeStamp = styled.p`
   text-align: center;
 `;
 
-export const MyChatBubble = styled.div`
+export const ChatBubble = styled.div`
   position: relative;
-  background-color: #b4c4da;
-  margin: 4px;
-  padding: 5px;
-  max-width: 75%;
-  float: right;
-  text-align: justify;
-  overflow-wrap: break-word;
-`;
-
-export const TheirChatBubble = styled.div`
-  position: relative;
-  background-color: #3386ff;
+  font-family: "Titillium Web", sans-serif;
+  background-color: ${props => props.background};
+  float: ${props => props.side};
+  line-height: 1em;
+  font-size: 16px;
+  color: black;
   margin: 5px;
   padding: 5px;
   max-width: 75%;
-  float: left;
+  border-radius: 5px;
   text-align: justify;
   overflow-wrap: break-word;
-`;
-
-export const ChatText = styled.p`
-  height: 100%;
-  line-height: 1em;
-  font-family: "Titillium Web", sans-serif;
-  font-size: 16px;
-  color: black;
+  clear: both;
 `;
 
 export const TimeText = styled.p`

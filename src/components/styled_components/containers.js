@@ -11,6 +11,7 @@ export const MainContainer = styled.div`
 `;
 
 export const Window = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   width: ${props => props.width}vw;
@@ -66,14 +67,19 @@ export const ButtonsContainer = styled.div`
 
 //chat container stuff
 export const ChatWindow = styled.div`
-  display: inline-block;
   width: 100%;
+  position: absolute;
+  top: 3em;
+  bottom: 4em;
   overflow: auto;
 `;
 
 export const ChatInputContainer = styled.div`
+  background-color: #ffffff;
+  position: absolute;
   width: 100%;
+  bottom: 0;
   display: inline-flex;
   border-top: 2px solid #5b5b5b;
-  height: 5em;
+  height: 3em;
 `;
