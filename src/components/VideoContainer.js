@@ -196,7 +196,7 @@ class VideoContainer extends Component {
     const { currTime, time, scrubTime, ready, currentVideo } = this.state;
     const videoId = this.props.queue.length
       ? this.props.queue[0].videoId
-      : this.state.currentVideo.videoId;
+      : currentVideo.videoId;
 
     return (
       <Window width={50} minWidth={500}>
