@@ -159,7 +159,7 @@ class VideoContainer extends Component {
       let timeString = date.toISOString().substr(11, 8);
       return timeString;
     }
-    return "00:00:00";
+    return "--:--:--";
   };
 
   ref = player => {

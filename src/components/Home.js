@@ -4,13 +4,24 @@ import styled from "styled-components";
 
 import { MainContainer, InputWindow } from "./styled_components/containers";
 import { Input } from "./styled_components/components";
-import { flicker } from "./styled_components/animations";
+import { fadeIn, flicker } from "./styled_components/animations";
+import { videoDetector } from "../VideoDetector";
 
 const Title = styled.h3`
   margin: 25px;
   font-family: "Titillium Web", sans-serif;
   font-size: 24px;
   line-height: 1em;
+`;
+
+const ErrorText = styled.p`
+  color: red;
+  font-family: "Titillium Web", sans-serif;
+  margin: 3px;
+  text-align: justify;
+  font-size: 12px;
+  line-height: 12px;
+  animation: ${fadeIn} 1s linear;
 `;
 
 const InstructionTitle = styled.p`
@@ -72,6 +83,7 @@ const Loading = styled.button`
 const Home = () => {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleInput = e => {
     e.preventDefault();
@@ -79,29 +91,34 @@ const Home = () => {
   };
 
   const handleSubmit = () => {
-    setLoading(true);
-    const uuid = uuidv1();
-    let payload = {
-      video: input
-    };
+    console.log(videoDetector(input));
+    if (videoDetector(input)) {
+      setLoading(true);
+      const uuid = uuidv1();
+      let payload = {
+        video: input
+      };
 
-    fetch(`/${uuid}`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    })
-      .then(() => {
-        console.log("redirecting");
-        window.location.href = `/${uuid}`;
-        setInput("");
-        setLoading(false);
+      fetch(`/${uuid}`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
       })
-      .catch(() => {
-        setLoading(false);
-      });
+        .then(() => {
+          console.log("redirecting");
+          window.location.href = `/${uuid}`;
+          setInput("");
+          setLoading(false);
+        })
+        .catch(() => {
+          setLoading(false);
+        });
+    } else {
+      setError(true);
+    }
   };
 
   const handleEnter = e => {
@@ -116,11 +133,15 @@ const Home = () => {
       <InputWindow>
         <Title>Enter a Youtube Link</Title>
         <Input
+          width={60}
           onChange={handleInput}
           value={input}
           placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
           onKeyPress={handleEnter}
         ></Input>
+        {error ? (
+          <ErrorText>Please input a valid Youtube link</ErrorText>
+        ) : null}
         {loading ? (
           <Loading>Loading...</Loading>
         ) : (
