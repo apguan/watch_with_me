@@ -78,6 +78,13 @@ const Home = () => {
     });
   };
 
+  const handleEnter = e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSubmit();
+    }
+  };
+
   return (
     <MainContainer>
       <InputWindow>
@@ -86,6 +93,7 @@ const Home = () => {
           onChange={handleInput}
           value={input}
           placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+          onKeyPress={handleEnter}
         ></Input>
         <EnterButton onClick={handleSubmit}>Create Room</EnterButton>
         <InstructionTitle>Instructions:</InstructionTitle>
