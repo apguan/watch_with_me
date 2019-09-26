@@ -21,7 +21,6 @@
     "uuid": "^3.3.3",
     "youtube-info": "^1.3.2"
   },
-  "proxy": "http://localhost:4000",
   "scripts": {
     "start": "npm run build && node server.js",
     "yarn-start": "react-scripts start",
