@@ -93,7 +93,7 @@ io.on("connect", socket => {
   });
 
   socket.on("initial sync", () => {
-    console.log("this is hitting the initial sync", socket.id, details);
+    console.log("initial sync", socket.id, details);
     io.to(room).emit("initial sync", details);
   });
 
