@@ -32,7 +32,7 @@ class VideoContainer extends Component {
 
   componentDidUpdate = prevProps => {
     if (
-      !_.isEqual(prevProps.queue, this.props.queue) &&
+      !_.isEqual(prevProps.queue[0], this.props.queue[0]) &&
       this.props.queue.length
     ) {
       this.setState(

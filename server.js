@@ -4,6 +4,7 @@ const app = express();
 const http = require("http").createServer(app);
 const path = require("path");
 const io = require("socket.io")(http);
+const uuidv4 = require("uuid/v4");
 const ogs = require("open-graph-scraper");
 
 app.use(express.static(path.join(__dirname, "build")));
@@ -31,6 +32,7 @@ app.post("/:roomId", async (req, res) => {
 
   if (metaData) {
     let videoData = {
+      uuid: uuidv4(),
       videoId: videoId,
       title: metaData.data.ogTitle,
       url: metaData.data.ogUrl,
@@ -108,6 +110,7 @@ io.on("connect", socket => {
 
     if (metaData) {
       let videoData = {
+        uuid: uuidv4(),
         videoId: videoId,
         title: metaData.data.ogTitle,
         url: metaData.data.ogUrl,

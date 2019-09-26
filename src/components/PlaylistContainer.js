@@ -45,9 +45,9 @@ const PlaylistContainer = ({ queue, removeVideo, addVideo }) => {
         ></Add>
       </InputBar>
       <UrlContainer>
-        {queue.map(({ title, thumbnail }, idx) => {
+        {queue.map(({ title, thumbnail, uuid }, idx) => {
           return (
-            <VideoPreview key={idx}>
+            <VideoPreview key={uuid}>
               <img src={thumbnail} height="39px" width="70px"></img>
               <UrlText>{title}</UrlText>
               <Remove
