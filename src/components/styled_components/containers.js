@@ -15,7 +15,7 @@ export const InputWindow = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 500px;
+  min-width: 60vw;
   margin: 50px;
   min-height: 200px;
   max-height: 500px;

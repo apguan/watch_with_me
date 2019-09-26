@@ -30,17 +30,6 @@ class VideoContainer extends Component {
     loop: false
   };
 
-  componentDidUpdate = prevProps => {
-    if (
-      !_.isEqual(prevProps.queue[0], this.props.queue[0]) &&
-      this.props.queue.length
-    ) {
-      this.setState({ url: this.props.queue[0].url }, () =>
-        this.player.seekTo(0)
-      );
-    }
-  };
-
   componentDidMount = () => {
     const { interval } = this.state;
     const { socket } = this.props;
@@ -58,7 +47,7 @@ class VideoContainer extends Component {
         case "play":
           this.setState({
             playing: true,
-            currTime: this.player ? this.player.getCurrentTime() : currTime
+            currTime
           });
           this.progressBar();
           break;
@@ -75,6 +64,17 @@ class VideoContainer extends Component {
           break;
       }
     });
+  };
+
+  componentDidUpdate = prevProps => {
+    if (
+      !_.isEqual(prevProps.queue[0], this.props.queue[0]) &&
+      this.props.queue.length
+    ) {
+      this.setState({ url: this.props.queue[0].url }, () =>
+        this.player.seekTo(0)
+      );
+    }
   };
 
   componentWillUnmount = () => {
