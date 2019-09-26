@@ -40,7 +40,7 @@ class VideoContainer extends Component {
           url: this.props.queue[0] ? this.props.queue[0].url : "",
           playing: true
         },
-        () => this.player.seekTo(0)
+        () => (this.props.queue[0] ? this.player.seekTo(0) : null)
       );
     }
   };
@@ -214,7 +214,6 @@ class VideoContainer extends Component {
               onSeek={e => console.log("onSeek", e)}
               onEnded={this.handleEnded}
               onError={e => console.log("onError", e)}
-              onProgress={this.handleProgress}
               onDuration={this.handleDuration}
             />
             <Timeline
@@ -252,6 +251,11 @@ class VideoContainer extends Component {
               <PlayButtons
                 onClick={this.nextVideo}
                 className="fas fa-fast-forward"
+                aria-hidden="true"
+              ></PlayButtons>
+              <PlayButtons
+                onClick={this.handleClickFullscreen}
+                className="fas fa-expand"
                 aria-hidden="true"
               ></PlayButtons>
             </ButtonsContainer>
