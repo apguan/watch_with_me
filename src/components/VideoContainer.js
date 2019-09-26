@@ -67,7 +67,7 @@ class VideoContainer extends Component {
           break;
         case "update":
           this.setState({ currTime: currTime }, () => {
-            this.player.seekTo(parseFloat(currTime));
+            this.player.seekTo(currTime);
             this.progressBar();
           });
           break;
@@ -104,7 +104,10 @@ class VideoContainer extends Component {
   };
 
   handleDuration = duration => {
-    this.setState({ duration });
+    console.log(this.player.getDuration(), duration);
+    this.setState({
+      duration: this.player ? this.player.getDuration() : duration
+    });
   };
 
   handleClickFullscreen = () => {
@@ -124,7 +127,7 @@ class VideoContainer extends Component {
 
     this.setState({ currTime: newCurrTime }, () => {
       clearInterval(this.state.interval);
-      this.player.seekTo(parseFloat(newCurrTime));
+      this.player.seekTo(newCurrTime);
       this.progressBar();
     });
   };
@@ -215,7 +218,7 @@ class VideoContainer extends Component {
             </Timeline>
             <TimeStamp>
               {scrubTime === 0
-                ? this.secondsToTime(currTime)
+                ? this.secondsToTime(Math.ceil(currTime))
                 : this.secondsToTime(scrubTime)}
               /{this.secondsToTime(duration)}
             </TimeStamp>

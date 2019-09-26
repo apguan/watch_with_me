@@ -76,7 +76,7 @@ export const ChatTitle = styled.p`
   padding-left: 12px;
   text-align: left;
   line-height: 16px;
-  font-size: 18px;
+  font-size: 17px;
 `;
 
 export const ChatInput = styled.textarea`
@@ -112,7 +112,7 @@ export const Playback = styled.div`
   border: none;
   border-radius: 7px;
   height: 100%;
-  width: ${props => (props.currTime / props.time) * 100 + 0.1}%;
+  width: ${props => (Math.ceil(props.currTime) / props.time) * 100}%;
   z-index: -1;
 `;
 
