@@ -2,7 +2,7 @@ import { useState } from "react";
 import socketIOClient from "socket.io-client";
 
 let connectSocket = function(room) {
-  return socketIOClient(window.location, {
+  return socketIOClient(window.location.origin, {
     query: "r_var=" + room
   });
 };
