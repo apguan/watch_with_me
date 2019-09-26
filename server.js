@@ -7,10 +7,40 @@ const io = require("socket.io")(http);
 const fetchVideoInfo = require("youtube-info");
 
 app.use(express.static(path.join(__dirname, "build")));
+app.use(express.json());
 
-app.get("/", (req, res) => {});
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+app.get("/:roomId", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
-app.get("/:roomId", (req, res) => {});
+app.post("/:roomId", async (req, res) => {
+  const roomId = req.params.roomId;
+  const videoUrl = req.body.video;
+
+  roomDetails[roomId] = {
+    queue: [],
+    messages: [],
+    videoDetails: {}
+  };
+
+  const metaData = await youtubeParser(videoUrl);
+
+  if (metaData) {
+    let videoData = {
+      videoId: metaData.videoId,
+      title: metaData.title,
+      url: metaData.url,
+      thumbnail: metaData.thumbnailUrl
+    };
+
+    roomDetails[roomId].queue.push(videoData);
+  }
+
+  res.status(200).send(true);
+});
 
 let roomDetails = {};
 
@@ -49,6 +79,7 @@ io.on("connect", socket => {
 
   socket.join(room, () => {
     console.log(
+      room,
       details.queue,
       details.messages,
       details.videoDetails,
@@ -61,6 +92,7 @@ io.on("connect", socket => {
   });
 
   socket.on("initial sync", () => {
+    console.log("this is hitting the initial sync", socket.id, details);
     io.to(room).emit("initial sync", details);
   });
 

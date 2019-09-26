@@ -10,16 +10,30 @@ export const MainContainer = styled.div`
   text-align: center;
 `;
 
+export const InputWindow = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 500px;
+  margin: 50px;
+  min-height: 200px;
+  max-height: 500px;
+  border-radius: 5px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 2px 10px 0 rgba(0, 0, 0, 0.19);
+`;
+
 export const Window = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   width: ${props => props.width}vw;
   min-width: ${props => props.minWidth || 100}px;
   margin: 15px;
-  height: 500px;
+  min-height: 375px;
+  max-height: 500px;
   border-radius: 5px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 2px 10px 0 rgba(0, 0, 0, 0.19);
 `;
 
 // Playlist containers
@@ -78,7 +92,7 @@ export const ChatInputContainer = styled.div`
   background-color: #ffffff;
   position: absolute;
   width: 100%;
-  bottom: 0;
+  bottom: 5px;
   display: inline-flex;
   border-top: 2px solid #5b5b5b;
   height: 3em;

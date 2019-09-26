@@ -66,7 +66,7 @@ const ChatBarContainer = ({ socket }) => {
             );
           } else {
             return (
-              <ChatBubble background={"#5c7cfa"} side={"left"} key={uuid}>
+              <ChatBubble background={"#90a5f9"} side={"left"} key={uuid}>
                 <Name>{name}</Name>
                 {message}
                 <TimeText timePosition={"left"}>

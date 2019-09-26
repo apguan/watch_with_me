@@ -15,23 +15,23 @@ export const UrlText = styled.div`
 `;
 
 export const Input = styled.input`
-  width: 100%;
-  float: left;
+  width: 95%;
+  align-items: center;
   height: 36px;
   border: none;
   text-indent: 15px;
   font-family: "Titillium Web", sans-serif;
+  border-bottom: 2px solid #d3d3d3;
 
   &:focus {
     outline: none;
-    animation: ${fadeIn} 1s linear;
     border-bottom: 2px solid #6d69d3;
   }
 
   &::-webkit-input-placeholder {
     font-family: "Titillium Web", sans-serif;
     font-size: 16px;
-    color: #5b5b5b;
+    color: #969696;
   }
 `;
 
@@ -76,6 +76,7 @@ export const ChatTitle = styled.p`
   padding-left: 12px;
   text-align: left;
   line-height: 16px;
+  font-size: 16px;
 `;
 
 export const ChatInput = styled.textarea`
@@ -94,6 +95,7 @@ export const ChatInput = styled.textarea`
 
 export const SendButton = styled.i`
   position: absolute:
+  float: right;
   display: flex;
   justify-content: center;
   margin: 6px 0;
