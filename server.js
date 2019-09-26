@@ -37,9 +37,10 @@ app.post("/:roomId", async (req, res) => {
     };
 
     roomDetails[roomId].queue.push(videoData);
+    res.status(200).send(true);
+  } else {
+    res.status(404).send(false);
   }
-
-  res.status(200).send(true);
 });
 
 let roomDetails = {};

@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import { MainContainer, InputWindow } from "./styled_components/containers";
 import { Input } from "./styled_components/components";
+import { flicker } from "./styled_components/animations";
 
 const Title = styled.h3`
   margin: 25px;
@@ -50,8 +51,27 @@ const EnterButton = styled.button`
   }
 `;
 
+const Loading = styled.button`
+  margin: 15px;
+  color: #ffffff;
+  background-color: #6d69d3;
+  border: none;
+  border-radius: 5px;
+  height: 36px;
+  width: 100px;
+  font-size: 15px;
+  font-family: "Titillium Web", sans-serif;
+  outline: none;
+
+  -webkit-animation: ${flicker} 1.5s infinite;
+  -moz-animation: ${flicker} 1.5s infinite;
+  -o-animation: ${flicker} 1.5s infinite;
+  animation: ${flicker} 1.5s infinite;
+`;
+
 const Home = () => {
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleInput = e => {
     e.preventDefault();
@@ -59,6 +79,7 @@ const Home = () => {
   };
 
   const handleSubmit = () => {
+    setLoading(true);
     const uuid = uuidv1();
     let payload = {
       video: input
@@ -71,11 +92,16 @@ const Home = () => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(payload)
-    }).then(() => {
-      console.log("redirecting");
-      window.location.href = `/${uuid}`;
-      setInput("");
-    });
+    })
+      .then(() => {
+        console.log("redirecting");
+        window.location.href = `/${uuid}`;
+        setInput("");
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   };
 
   const handleEnter = e => {
@@ -95,7 +121,11 @@ const Home = () => {
           placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
           onKeyPress={handleEnter}
         ></Input>
-        <EnterButton onClick={handleSubmit}>Create Room</EnterButton>
+        {loading ? (
+          <Loading>Loading...</Loading>
+        ) : (
+          <EnterButton onClick={handleSubmit}>Create Room</EnterButton>
+        )}
         <InstructionTitle>Instructions:</InstructionTitle>
         <div>
           <Instructions>• Enter a Youtube link</Instructions>
