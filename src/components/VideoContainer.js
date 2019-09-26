@@ -30,6 +30,18 @@ class VideoContainer extends Component {
     loop: false
   };
 
+  componentDidUpdate = prevProps => {
+    if (
+      !_.isEqual(prevProps.queue, this.props.queue) &&
+      this.props.queue.length
+    ) {
+      this.setState(
+        { url: this.props.queue[0] ? this.props.queue[0].url : "" },
+        () => this.player.seekTo(0)
+      );
+    }
+  };
+
   componentDidMount = () => {
     const { interval } = this.state;
     const { socket } = this.props;
@@ -66,17 +78,6 @@ class VideoContainer extends Component {
     });
   };
 
-  componentDidUpdate = prevProps => {
-    if (
-      !_.isEqual(prevProps.queue[0], this.props.queue[0]) &&
-      this.props.queue.length
-    ) {
-      this.setState({ url: this.props.queue[0].url }, () =>
-        this.player.seekTo(0)
-      );
-    }
-  };
-
   componentWillUnmount = () => {
     this.props.socket.off("video details");
   };
@@ -104,7 +105,6 @@ class VideoContainer extends Component {
   };
 
   handleDuration = duration => {
-    console.log(this.player.getDuration(), duration);
     this.setState({
       duration: this.player ? this.player.getDuration() : duration
     });
@@ -157,10 +157,8 @@ class VideoContainer extends Component {
       let date = new Date(null);
       date.setSeconds(time);
       let timeString = date.toISOString().substr(11, 8);
-
       return timeString;
     }
-
     return "00:00:00";
   };
 

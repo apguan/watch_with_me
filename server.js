@@ -104,13 +104,14 @@ io.on("connect", socket => {
 
   socket.on("queue", async video => {
     const metaData = await youtubeParser(video);
+    const videoId = parseVideoId(video);
 
     if (metaData) {
       let videoData = {
-        videoId: metaData.videoId,
-        title: metaData.title,
-        url: metaData.url,
-        thumbnail: metaData.thumbnailUrl
+        videoId: videoId,
+        title: metaData.data.ogTitle,
+        url: metaData.data.ogUrl,
+        thumbnail: metaData.data.ogImage.url
       };
 
       details.queue.push(videoData);
