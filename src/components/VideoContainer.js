@@ -36,7 +36,10 @@ class VideoContainer extends Component {
       this.props.queue.length
     ) {
       this.setState(
-        { url: this.props.queue[0] ? this.props.queue[0].url : "" },
+        {
+          url: this.props.queue[0] ? this.props.queue[0].url : "",
+          playing: true
+        },
         () => this.player.seekTo(0)
       );
     }
@@ -85,6 +88,13 @@ class VideoContainer extends Component {
   nextVideo = () => {
     clearInterval(this.state.interval);
     this.setState({ currTime: 0 }, () => this.props.dequeueVideo());
+  };
+
+  restart = () => {
+    this.player.seekTo(0);
+    this.props.socket.emit("video details", {
+      action: "restart"
+    });
   };
 
   handlePlay = () => {
@@ -226,16 +236,19 @@ class VideoContainer extends Component {
                 className="fas fa-backward"
                 aria-hidden="true"
               ></PlayButtons>
-              <PlayButtons
-                onClick={this.handlePlay}
-                className="fas fa-play-circle"
-                aria-hidden="true"
-              ></PlayButtons>
-              <PlayButtons
-                onClick={this.handlePause}
-                className="far fa-pause-circle"
-                aria-hidden="true"
-              ></PlayButtons>
+              {playing ? (
+                <PlayButtons
+                  onClick={this.handlePause}
+                  className="far fa-pause-circle"
+                  aria-hidden="true"
+                ></PlayButtons>
+              ) : (
+                <PlayButtons
+                  onClick={this.handlePlay}
+                  className="fas fa-play-circle"
+                  aria-hidden="true"
+                ></PlayButtons>
+              )}
               <PlayButtons
                 onClick={this.nextVideo}
                 className="fas fa-fast-forward"
