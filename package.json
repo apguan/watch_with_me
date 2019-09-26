@@ -23,7 +23,7 @@
   },
   "proxy": "http://localhost:4000",
   "scripts": {
-    "start": "npm run build && node server.js"
+    "start": "npm run build && node server.js",
     "yarn-start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
