@@ -31,7 +31,7 @@ export const Window = styled.div`
   min-width: ${props => props.minWidth || 100}px;
   margin: 15px;
   min-height: 375px;
-  max-height: 500px;
+  height: 70vh;
   border-radius: 5px;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 2px 10px 0 rgba(0, 0, 0, 0.19);
 `;
@@ -40,6 +40,7 @@ export const Window = styled.div`
 export const InputBar = styled.div`
   margin: 4px 0;
   display: inline-flex;
+  justify-content: center;
   width: 100%;
 `;
 
@@ -53,6 +54,7 @@ export const VideoPreview = styled.div`
   display: inline-flex;
   width: 100%;
   justify-content: center;
+  align-items: center;
   height: 50px;
   position: relative;
   margin: 5px 0;
@@ -84,16 +86,18 @@ export const ChatWindow = styled.div`
   width: 100%;
   position: absolute;
   top: 3em;
-  bottom: 4em;
+  bottom: 6em;
   overflow: auto;
 `;
 
 export const ChatInputContainer = styled.div`
-  background-color: #ffffff;
-  position: absolute;
-  width: 100%;
-  bottom: 5px;
+  align-background-color: #ffffff;
   display: inline-flex;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  bottom: 1vh;
   border-top: 2px solid #5b5b5b;
-  height: 3em;
+  height: 5em;
 `;

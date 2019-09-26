@@ -58,7 +58,7 @@ export const Remove = styled.i`
   background-color: none;
   padding-top: 2px;
   float: right;
-  margin: 9px 3px 9px 0;
+  margin: 9px 0;
 
   &:hover {
     cursor: pointer;
@@ -76,7 +76,7 @@ export const ChatTitle = styled.p`
   padding-left: 12px;
   text-align: left;
   line-height: 16px;
-  font-size: 16px;
+  font-size: 18px;
 `;
 
 export const ChatInput = styled.textarea`
@@ -139,7 +139,7 @@ export const ChatBubble = styled.div`
   background-color: ${props => props.background};
   float: ${props => props.side};
   line-height: 1em;
-  font-size: 10px;
+  font-size: 14px;
   color: black;
   margin: 5px;
   padding: 5px;

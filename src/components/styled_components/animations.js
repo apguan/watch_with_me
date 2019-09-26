@@ -9,13 +9,3 @@ export const fadeIn = keyframes`
     opacity: 1;
   }
 `;
-
-export const scroll = keyframes`
-  0% {
-    width: 0%;
-  }
-
-  100% {
-    width: 100%;
-  }
-`;
