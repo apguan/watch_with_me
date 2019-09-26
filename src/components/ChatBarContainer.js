@@ -84,7 +84,10 @@ const ChatBarContainer = ({ socket }) => {
           onChange={handleInput}
           onKeyPress={handleEnter}
         ></ChatInput>
-        <SendButton className="fas fa-arrow-right fa-2x" />
+        <SendButton
+          onClick={handleSubmit}
+          className="fas fa-arrow-right fa-2x"
+        />
       </ChatInputContainer>
     </Window>
   );
