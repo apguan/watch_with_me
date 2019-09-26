@@ -4,7 +4,7 @@ const app = express();
 const http = require("http").createServer(app);
 const path = require("path");
 const io = require("socket.io")(http);
-const fetchVideoInfo = require("youtube-info");
+const ogs = require("open-graph-scraper");
 
 app.use(express.static(path.join(__dirname, "build")));
 app.use(express.json());
@@ -26,14 +26,15 @@ app.post("/:roomId", async (req, res) => {
     videoDetails: {}
   };
 
-  const metaData = await youtubeParser(videoUrl);
+  let metaData = await youtubeParser(videoUrl);
+  let videoId = parseVideoId(videoUrl);
 
   if (metaData) {
     let videoData = {
-      videoId: metaData.videoId,
-      title: metaData.title,
-      url: metaData.url,
-      thumbnail: metaData.thumbnailUrl
+      videoId: videoId,
+      title: metaData.data.ogTitle,
+      url: metaData.data.ogUrl,
+      thumbnail: metaData.data.ogImage.url
     };
 
     roomDetails[roomId].queue.push(videoData);
@@ -45,21 +46,20 @@ app.post("/:roomId", async (req, res) => {
 
 let roomDetails = {};
 
-const youtubeParser = async url => {
-  const parseVideoId = url => {
-    if (url) {
-      let regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-      let match = url.match(regExp);
-      if (match && match[2].length === 11) {
-        return match[2];
-      }
+const parseVideoId = url => {
+  if (url) {
+    let regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    let match = url.match(regExp);
+    if (match && match[2].length === 11) {
+      return match[2];
     }
-  };
+  }
+};
 
+const youtubeParser = async url => {
   try {
-    return await fetchVideoInfo(parseVideoId(url)).then(videoInfo => {
-      return videoInfo;
-    });
+    const options = { url, timeout: 4000 };
+    return await ogs(options);
   } catch (e) {
     console.log(e);
   }
