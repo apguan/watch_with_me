@@ -124,6 +124,10 @@ class VideoContainer extends Component {
     screenfull.request(findDOMNode(this.player));
   };
 
+  handleEnded = () => {
+    this.nextVideo();
+  };
+
   updateProgressBarPosition = e => {
     const rect = e.target.getBoundingClientRect();
     const x = e.clientX - rect.left;
