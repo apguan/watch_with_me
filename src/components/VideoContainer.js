@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { findDOMNode } from "react-dom";
-import screenfull from "screenfull";
-import ReactPlayer from "react-player";
 import _ from "lodash";
+
+import ReactPlayer from "react-player";
+import screenfull from "screenfull";
+import VolumeSlider from "./VolumeSlider.js";
 
 import {
   Window,
@@ -40,7 +42,11 @@ class VideoContainer extends Component {
           url: this.props.queue[0] ? this.props.queue[0].url : "",
           playing: true
         },
-        () => (this.props.queue[0] ? this.player.seekTo(0) : null)
+        () => {
+          if (this.props.queue[0]) {
+            this.player.seekTo(0);
+          }
+        }
       );
     }
   };
@@ -126,6 +132,10 @@ class VideoContainer extends Component {
 
   handleEnded = () => {
     this.nextVideo();
+  };
+
+  handleVolumeChange = volume => {
+    this.setState({ volume });
   };
 
   updateProgressBarPosition = e => {
@@ -234,6 +244,10 @@ class VideoContainer extends Component {
               /{this.secondsToTime(duration)}
             </TimeStamp>
             <ButtonsContainer>
+              <VolumeSlider
+                volume={volume}
+                handleVolumeChange={this.handleVolumeChange}
+              />
               <PlayButtons
                 onClick={this.restart}
                 className="fas fa-backward"
@@ -261,6 +275,7 @@ class VideoContainer extends Component {
                 onClick={this.handleClickFullscreen}
                 className="fas fa-expand"
                 aria-hidden="true"
+                end={true}
               ></PlayButtons>
             </ButtonsContainer>
           </>

@@ -120,7 +120,7 @@ export const PlayButtons = styled.i`
   display: flex;
   align-items: center;
   text-align: center;
-  margin: 10px;
+  margin: ${props => (props.end ? "0 15%" : "10px")};
 
   &:hover {
     cursor: pointer;

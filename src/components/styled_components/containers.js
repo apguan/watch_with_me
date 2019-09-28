@@ -78,7 +78,9 @@ export const Timeline = styled.div`
 
 export const ButtonsContainer = styled.div`
   display: inline-flex;
+  width: 70%;
   justify-content: center;
+  align-self: center;
   flex-direction: row;
 `;
 
