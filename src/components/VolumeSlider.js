@@ -4,7 +4,7 @@ import styled from "styled-components";
 //video container stuff
 export const VolumeContainer = styled.div`
   display: inline-flex;
-  margin: 0 10%;
+  margin: 0 8% 0 0;
   align-self: center;
 `;
 

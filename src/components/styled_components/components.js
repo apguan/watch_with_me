@@ -120,7 +120,7 @@ export const PlayButtons = styled.i`
   display: flex;
   align-items: center;
   text-align: center;
-  margin: ${props => (props.end ? "0 15%" : "10px")};
+  margin: ${props => (props.end ? "0 0 0 18%" : "10px")};
 
   &:hover {
     cursor: pointer;
@@ -130,6 +130,10 @@ export const PlayButtons = styled.i`
 
 export const TimeStamp = styled.p`
   margin: 0;
+  width: 100%;
+  display: flex;
+  align-self: center;
+  justify-content: center;
   text-align: center;
 `;
 
