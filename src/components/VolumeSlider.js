@@ -6,11 +6,11 @@ export const VolumeContainer = styled.div`
   display: inline-flex;
   margin: 0 10%;
   align-self: center;
-  height: 8px;
 `;
 
 export const Slider = styled.input`
-  width: 50px;
+  width: 5vw;
+  height: 8px;
 `;
 
 const VolumeSlider = ({ volume, handleVolumeChange }) => {
