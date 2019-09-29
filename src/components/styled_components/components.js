@@ -16,6 +16,7 @@ export const UrlText = styled.div`
 
 export const Input = styled.input`
   width: ${props => (props.width ? props.width : 95)}%;
+  text-align: ${props => (props.center ? "center" : "left")};
   align-items: center;
   height: 36px;
   border: none;

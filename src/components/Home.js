@@ -138,6 +138,7 @@ const Home = () => {
           value={input}
           placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
           onKeyPress={handleEnter}
+          center={true}
         ></Input>
         {error ? (
           <ErrorText>Please input a valid Youtube link</ErrorText>
