@@ -152,7 +152,9 @@ const Home = () => {
         <div>
           <Instructions>• Enter a Youtube link</Instructions>
           <Instructions>• Share the link with your friends</Instructions>
-          <Instructions>• Watch videos together!</Instructions>
+          <Instructions>
+            • Watch and control the same video together!
+          </Instructions>
         </div>
         <br />
         <br />
