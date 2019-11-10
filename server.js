@@ -18,30 +18,43 @@ app.get("/:roomId", (req, res) => {
 });
 
 app.post("/:roomId", async (req, res) => {
-  const roomId = req.params.roomId;
-  const videoUrl = req.body.video;
+  try {
+    const roomId = req.params.roomId;
+    const videoUrl = req.body.video;
 
-  roomDetails[roomId] = {
-    queue: [],
-    messages: [],
-    videoDetails: {}
-  };
-
-  let metaData = await youtubeParser(videoUrl);
-  let videoId = parseVideoId(videoUrl);
-
-  if (metaData) {
-    let videoData = {
-      uuid: uuidv4(),
-      videoId: videoId,
-      title: metaData.data.ogTitle,
-      url: metaData.data.ogUrl,
-      thumbnail: metaData.data.ogImage.url
+    roomDetails[roomId] = {
+      queue: [],
+      messages: [],
+      videoDetails: {}
     };
 
-    roomDetails[roomId].queue.push(videoData);
+    let metaData = await youtubeParser(videoUrl);
+    let videoId = parseVideoId(videoUrl);
+
+    if (metaData) {
+      let videoData = {
+        uuid: uuidv4(),
+        videoId: videoId,
+        title: metaData.data.ogTitle,
+        url: metaData.data.ogUrl,
+        thumbnail: metaData.data.ogImage.url
+      };
+
+      roomDetails[roomId].queue.push(videoData);
+    } else {
+      let videoData = {
+        uuid: uuidv4(),
+        videoId: videoId,
+        title: "",
+        url: videoUrl,
+        thumbnail: ""
+      };
+
+      roomDetails[roomId].queue.push(videoData);
+    }
     res.status(200).send(true);
-  } else {
+  } catch (e) {
+    console.log(e);
     res.status(404).send(false);
   }
 });
