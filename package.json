@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "baseui": "^9.69.0",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "lodash": "^4.17.15",
@@ -17,6 +18,8 @@
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "styled-components": "^4.4.1",
+    "styletron-engine-atomic": "^1.4.6",
+    "styletron-react": "^5.2.7",
     "time-ago": "^0.2.1",
     "unique-names-generator": "^3.1.1",
     "uuid": "^3.4.0"

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import uuidv1 from "uuid/v1";
 import styled from "styled-components";
+import { Button } from "baseui/button";
+import { ButtonGroup, MODE } from "baseui/button-group";
+import uuidv1 from "uuid/v1";
 
 import { MainContainer, InputWindow } from "./styled_components/containers";
 import { Input } from "./styled_components/components";
@@ -62,6 +64,11 @@ const EnterButton = styled.button`
   }
 `;
 
+const InstructionsContainer = styled.div`
+  margin: 0px 0px 20px 0px;
+  padding: 20px;
+`;
+
 const Loading = styled.button`
   margin: 15px;
   color: #ffffff;
@@ -80,10 +87,15 @@ const Loading = styled.button`
   animation: ${flicker} 1.5s infinite;
 `;
 
+const YOUTUBE = "youtube";
+const OTHER = "other";
+
 const Home = () => {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [videoSrc, setVideoSrc] = useState(YOUTUBE);
+  const [selected, setSelected] = useState(0);
 
   const handleInput = e => {
     e.preventDefault();
@@ -91,15 +103,41 @@ const Home = () => {
   };
 
   const handleSubmit = () => {
-    console.log(videoDetector(input));
-    if (videoDetector(input)) {
+    const uuid = uuidv1();
+    if (videoSrc === YOUTUBE) {
+      if (videoDetector(input)) {
+        setLoading(true);
+        let payload = {
+          video: input
+        };
+
+        fetch(`/youtube/${uuid}`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        })
+          .then(() => {
+            console.log("redirecting");
+            window.location.href = `/${uuid}`;
+            setInput("");
+            setLoading(false);
+          })
+          .catch(() => {
+            setLoading(false);
+          });
+      } else {
+        setError(true);
+      }
+    } else {
       setLoading(true);
-      const uuid = uuidv1();
       let payload = {
         video: input
       };
 
-      fetch(`/${uuid}`, {
+      fetch(`/other/${uuid}`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -116,8 +154,6 @@ const Home = () => {
         .catch(() => {
           setLoading(false);
         });
-    } else {
-      setError(true);
     }
   };
 
@@ -128,36 +164,82 @@ const Home = () => {
     }
   };
 
+  const handleVideoSource = src => {
+    setVideoSrc(src);
+  };
+
   return (
     <MainContainer>
+      <ButtonGroup
+        mode={MODE.radio}
+        selected={selected}
+        onClick={(event, index) => {
+          setSelected(index);
+        }}
+      >
+        <Button onClick={() => handleVideoSource(YOUTUBE)}>Youtube</Button>
+        <Button onClick={() => handleVideoSource(OTHER)}>Other</Button>
+      </ButtonGroup>
+
       <InputWindow>
-        <Title>Enter a Youtube Link</Title>
-        <Input
-          width={60}
-          onChange={handleInput}
-          value={input}
-          placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-          onKeyPress={handleEnter}
-          center={true}
-        ></Input>
-        {error ? (
-          <ErrorText>Please input a valid Youtube link</ErrorText>
-        ) : null}
-        {loading ? (
-          <Loading>Loading...</Loading>
-        ) : (
-          <EnterButton onClick={handleSubmit}>Create Room</EnterButton>
+        {videoSrc === YOUTUBE && (
+          <>
+            <Title>Enter Youtube Link</Title>
+            <Input
+              width={60}
+              onChange={handleInput}
+              value={input}
+              placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+              onKeyPress={handleEnter}
+              center={true}
+            ></Input>
+            {error ? (
+              <ErrorText>Please input a valid Youtube link</ErrorText>
+            ) : null}
+            {loading ? (
+              <Loading>Loading...</Loading>
+            ) : (
+              <EnterButton onClick={handleSubmit}>Create Room</EnterButton>
+            )}
+            <InstructionsContainer>
+              <InstructionTitle>Instructions:</InstructionTitle>
+              <Instructions>• Enter a Youtube link</Instructions>
+              <Instructions>• Share the link with your friends</Instructions>
+              <Instructions>
+                • Watch and control the same video together!
+              </Instructions>
+            </InstructionsContainer>
+          </>
         )}
-        <InstructionTitle>Instructions:</InstructionTitle>
-        <div>
-          <Instructions>• Enter a Youtube link</Instructions>
-          <Instructions>• Share the link with your friends</Instructions>
-          <Instructions>
-            • Watch and control the same video together!
-          </Instructions>
-        </div>
-        <br />
-        <br />
+
+        {videoSrc === OTHER && (
+          <>
+            <Title>Enter A Video Source</Title>
+            <Input
+              width={60}
+              onChange={handleInput}
+              value={input}
+              placeholder="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+              onKeyPress={handleEnter}
+              center={true}
+            ></Input>
+            {loading ? (
+              <Loading>Loading...</Loading>
+            ) : (
+              <EnterButton onClick={handleSubmit}>Create Room</EnterButton>
+            )}
+            <InstructionsContainer>
+              <InstructionTitle>Instructions:</InstructionTitle>
+              <Instructions>
+                • Enter a video source, this can be anything!
+              </Instructions>
+              <Instructions>• Share the link with your friends</Instructions>
+              <Instructions>
+                • Watch and control the same video together!
+              </Instructions>
+            </InstructionsContainer>
+          </>
+        )}
       </InputWindow>
     </MainContainer>
   );

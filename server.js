@@ -17,7 +17,7 @@ app.get("/:roomId", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-app.post("/:roomId", async (req, res) => {
+app.post("/youtube/:roomId", async (req, res) => {
   try {
     const roomId = req.params.roomId;
     const videoUrl = req.body.video;
